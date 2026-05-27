@@ -6,7 +6,7 @@ int main(int argc,char * argv[]){
 
     QQmlApplicationEngine engine;
 
-    engine.loadFromModule("Wordl", "Main");
+    engine.loadFromModule("WordlClone", "Main");
 
     if (engine.rootObjects().isEmpty())
         return -1;

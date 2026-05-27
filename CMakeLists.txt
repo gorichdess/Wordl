@@ -7,16 +7,21 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Qt6 6.4 REQUIRED COMPONENTS Quick)
  
 qt_standard_project_setup()
+
+qt_policy(SET QTP0001 NEW)
+qt_policy(SET QTP0004 NEW)
  
 qt_add_executable(WordlClone
   main.cpp
 )
  
 qt_add_qml_module(WordlClone
-    URI Wordl     
+    URI WordlClone
     VERSION 1.0
-    QML_FILES qml/Main.qml
-              qml/pages/GamePage.qml
+    QML_FILES
+        qml/Main.qml
+        qml/pages/GamePage.qml
+        qml/components/LetterTile.qml
 )
  
 target_link_libraries(WordlClone

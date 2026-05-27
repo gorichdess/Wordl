@@ -20,13 +20,12 @@ Window{
             height: stackViewMain.height
 
             Row {
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: parent.top
+                anchors.centerIn: parent
                 anchors.topMargin: 20
                 spacing: 15
 
                 Button{
-                    id: newGame
+                    id: newGameButton
                     width: 250
                     height: 50
 
@@ -43,14 +42,11 @@ Window{
                         stackViewMain.push("pages/GamePage.qml")
                     }
 
-                    background: Rectangle {
-                        color: addTransaction.pressed ? "#E0E0E0" : "#C0C0C0"
-                    }
 
                 }
 
                 Button{
-                    id: statsPage
+                    id: statsPageButton
                     width: 250
                     height: 50
 
@@ -67,9 +63,6 @@ Window{
                         //stackView.push("")
                     }
 
-                    background: Rectangle {
-                        color: addTransaction.pressed ? "#E0E0E0" : "#C0C0C0"
-                    }
                 }
             }
         }
