@@ -15,18 +15,28 @@ qt_add_executable(WordlClone
   main.cpp
   src/GameController.cpp
 )
+
+set_source_files_properties(qml/components/Theme.qml
+    PROPERTIES
+        QT_QML_SINGLETON_TYPE TRUE
+)
  
 qt_add_qml_module(WordlClone
     URI WordlClone
     VERSION 1.0
+    RESOURCE_PREFIX "/qt/qml"
     QML_FILES
         qml/Main.qml
         qml/pages/GamePage.qml
+        qml/pages/SettingsPage.qml
+        qml/pages/StatsPage.qml
         qml/components/LetterTile.qml
         qml/components/GameBoard.qml
         qml/components/KeyboardButton.qml
         qml/components/GameKeyboard.qml
+        qml/components/Theme.qml
 )
+
  
 target_link_libraries(WordlClone
     PRIVATE Qt6::Quick

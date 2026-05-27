@@ -21,18 +21,18 @@ Rectangle {
     color: {
         switch (status) {
                 case box.tileStatus.CORRECT:
-                    return "#6aaa64";
+                    return Theme.correctColor;
                 case box.tileStatus.PRESENT:
-                    return "#c9b458";
+                    return Theme.presentColor;
                 case box.tileStatus.ABSENT:
-                    return "#787c7e";
+                    return Theme.absentColor;
                 default:
                     return "transparent";
             }
     }
 
     border.color: {
-        if (status === box.tileStatus.EMPTY) return letter === "" ? "#d3d6da" : "#878a8c"
+        if (status === box.tileStatus.EMPTY) return letter === "" ? Theme.defaultKeyColor : Theme.typedBorderColor
         return "transparent"
     }
 
@@ -41,7 +41,7 @@ Rectangle {
         anchors.centerIn: parent
         font.pointSize: 22
         font.bold: true
-        color: box.status === box.tileStatus.EMPTY ? "#000000" : "#ffffff"
+        color: box.status === box.tileStatus.EMPTY ? Theme.textOnLightBg : Theme.textOnDarkBg
     }
 
     Behavior on color { ColorAnimation { duration: 250 } }

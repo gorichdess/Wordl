@@ -1,7 +1,8 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include "src/GameController.h"
+
+#include <src/GameController.h>
 
 int main(int argc,char * argv[]){
     QGuiApplication app(argc,argv);

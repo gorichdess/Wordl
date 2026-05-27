@@ -14,10 +14,10 @@ Button {
             radius: 4
             color: {
                 switch (root.keyStatus) {
-                case 3: return "#6aaa64" // correct
-                case 2: return "#c9b458" // present
-                case 1: return "#787c7e" // absent
-                default: return "#d3d6da"
+                case 3: return Theme.correctColor // correct
+                case 2: return Theme.presentColor // present
+                case 1: return Theme.absentColor // absent
+                default: return Theme.defaultKeyColor
                 }
             }
         }
