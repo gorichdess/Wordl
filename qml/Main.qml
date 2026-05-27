@@ -3,7 +3,7 @@ import QtQuick.Controls
 
 Window{
     width : 700
-    height : 500
+    height : 700
     visible : true
     title: qsTr("WordlClone")
 
@@ -19,7 +19,7 @@ Window{
             width: stackViewMain.width
             height: stackViewMain.height
 
-            Row {
+            Column {
                 anchors.centerIn: parent
                 anchors.topMargin: 20
                 spacing: 15
@@ -41,8 +41,6 @@ Window{
                     onClicked: {
                         stackViewMain.push("pages/GamePage.qml")
                     }
-
-
                 }
 
                 Button{
@@ -63,6 +61,25 @@ Window{
                         //stackView.push("")
                     }
 
+                }
+
+                Button{
+                    id: settingsPageButton
+                    width: 250
+                    height: 50
+
+                    Text{
+                        id: settingsPageText
+                        text : "Settings"
+                        anchors.centerIn: parent
+                        font.pointSize: 20
+                        font.bold: true
+                    }
+
+
+                    onClicked: {
+                        //stackView.push("")
+                    }
                 }
             }
         }

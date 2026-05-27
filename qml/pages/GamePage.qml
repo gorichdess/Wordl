@@ -4,11 +4,13 @@ import QtQuick.Layouts
 import "../components"  //whyyyy import "WordlClone" doesnt work??
 
 Page {
+    id: gamePage
     width: stackViewMain.width
     height: stackViewMain.height
 
     property string secretWord: "WORDS" // Later will be changed to db
     property int currentAttempt: 0
+    property string currentInput: ""
 
     Button {
         id: back
@@ -36,41 +38,27 @@ Page {
         anchors.centerIn: parent
         spacing: 20
 
-        Grid{
-            id: gameGrid
-            columns: 5
-            rows: 5
-            spacing: 8
+        GameBoard {
+            id: gameBoard
             Layout.alignment: Qt.AlignHCenter
-
-            Repeater{
-                model: 25
-
-                LetterTile{
-                    id: cell
-
-                    readonly property int cellRow: Math.floor(index / 5)
-                    readonly property int cellCol: index % 5
-
-                    property string savedLetter: ""
-
-                    letter: cellRow === currentAttempt
-                            ? inputField.text[cellCol] || ""
-                            : savedLetter
-                }
-            }
+            currentAttempt: gamePage.currentAttempt
+            inputText: gamePage.currentInput
         }
 
-        TextField {
-            id: inputField
-            placeholderText: "Enter 5 letters..."
-            font.pointSize: 16
-            maximumLength: 5
-            Layout.fillWidth: true
-            horizontalAlignment: Text.AlignHCenter
+        GameKeyboard {
+            id: gameKeyboard
 
-            validator: RegularExpressionValidator { regularExpression: /[a-zA-Zа-яА-ЯёЁ]{5}/ }
-            onAccepted: submitWordButton.clicked() //if enter pressed
+            Layout.alignment: Qt.AlignHCenter
+            onLetterPressed: function(letter) {
+                if (gamePage.currentInput.length < 5 && currentAttempt<5)
+                    gamePage.currentInput += letter
+            }
+
+            onEnterPressed: submitWordButton.clicked()
+
+            onBackspacePressed: {
+                gamePage.currentInput = gamePage.currentInput.slice(0, -1)
+            }
         }
 
         RowLayout {
@@ -83,7 +71,7 @@ Page {
                 id: submitWordButton
                 Layout.fillWidth: true
                 Layout.preferredHeight: 50
-                enabled: inputField.text.length === 5 && currentAttempt < 5
+                enabled: gamePage.currentInput.length === 5 && gamePage.currentAttempt < 5
 
                 Text{
                     id: submitWordText
@@ -95,33 +83,33 @@ Page {
 
 
                 onClicked: {
-                    var guess = inputField.text.toUpperCase();
-                    var startIdx = currentAttempt * 5;
+                    var guess = gamePage.currentInput.toUpperCase()
+                    var startIdx = gamePage.currentAttempt * 5
 
                     for (var i = 0; i < 5; i++) {
-                        var cellIdx = startIdx + i;
-                        var currentCell = gameGrid.children[cellIdx];
-                        var letter = guess[i];
+                        var cellIdx = startIdx + i
+                        var currentCell = gameBoard.getCell(cellIdx)
+                        var letter = guess[i]
 
-                        currentCell.savedLetter = letter;
+                        currentCell.savedLetter = letter
 
-                        switch (true) {
-                        case (letter === secretWord[i]):
-                            currentCell.status = currentCell.tileStatus.CORRECT;
-                            break;
+                        var status = currentCell.tileStatus.ABSENT
 
-                        case (secretWord.indexOf(letter) !== -1):
-                            currentCell.status = currentCell.tileStatus.PRESENT;
-                            break;
-
-                        default:
-                            currentCell.status = currentCell.tileStatus.ABSENT;
-                            break;
+                        if (letter === secretWord[i]) {
+                            status = currentCell.tileStatus.CORRECT
+                        } else if (secretWord.indexOf(letter) !== -1) {
+                            status = currentCell.tileStatus.PRESENT
                         }
+
+                        // change grid tile color
+                        currentCell.status = status
+
+                        // change keyboard button color
+                        gameKeyboard.updateKey(letter, status)
                     }
 
-                    currentAttempt++;
-                    inputField.clear();
+                    gamePage.currentAttempt++
+                    gamePage.currentInput = ""
                 }
 
             }
@@ -141,16 +129,12 @@ Page {
 
 
                 onClicked: {
+                    currentInput = ""
                     currentAttempt = 0;
-                    inputField.clear();
+                    gamePage.currentInput = "";
 
-                    for (var i = 0; i < gameGrid.children.length - 1; i++) {
-                        var cell = gameGrid.children[i];
-                        if (cell.status) {
-                            cell.status = cell.tileStatus.EMPTY;
-                            cell.savedLetter = "";
-                        }
-                    }
+                    gameBoard.clearBoard()
+                    gameKeyboard.clearKeys()
                 }
 
             }

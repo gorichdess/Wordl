@@ -22,6 +22,9 @@ qt_add_qml_module(WordlClone
         qml/Main.qml
         qml/pages/GamePage.qml
         qml/components/LetterTile.qml
+        qml/components/GameBoard.qml
+        qml/components/KeyboardButton.qml
+        qml/components/GameKeyboard.qml
 )
  
 target_link_libraries(WordlClone
