@@ -13,6 +13,7 @@ qt_policy(SET QTP0004 NEW)
  
 qt_add_executable(WordlClone
   main.cpp
+  src/GameController.cpp
 )
  
 qt_add_qml_module(WordlClone
