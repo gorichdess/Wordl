@@ -99,3 +99,17 @@ void GameController::resetGame()
     emit currentInputChanged();
     emit currentAttemptChanged();
 }
+
+QString GameController::wordLanguage() const
+{
+    return m_wordLanguage;
+}
+
+void GameController::setWordLanguage(const QString &language)
+{
+    if (m_wordLanguage == language)
+        return;
+
+    m_wordLanguage = language;
+    emit wordLanguageChanged();
+}

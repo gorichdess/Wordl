@@ -18,6 +18,8 @@ class GameController : public QObject
     Q_PROPERTY(BoardModel* boardModel READ boardModel CONSTANT)
     Q_PROPERTY(KeyboardModel* keyboardModel READ keyboardModel CONSTANT)
 
+    Q_PROPERTY(QString wordLanguage READ wordLanguage WRITE setWordLanguage NOTIFY wordLanguageChanged)
+
 public:
 
     explicit GameController(QObject *parent = nullptr);
@@ -33,6 +35,9 @@ public:
     BoardModel* boardModel() const;
     KeyboardModel* keyboardModel() const;
 
+    QString wordLanguage() const;
+    void setWordLanguage(const QString &language);
+
     Q_INVOKABLE void appendLetter(const QString &letter);
     Q_INVOKABLE void removeLastLetter();
     Q_INVOKABLE void submitGuess();
@@ -42,6 +47,7 @@ signals:
     void secretWordChanged();
     void currentAttemptChanged();
     void currentInputChanged();
+    void wordLanguageChanged();
 
 private:
     QString m_secretWord;
@@ -52,5 +58,7 @@ private:
 
     BoardModel *m_boardModel;
     KeyboardModel *m_keyboardModel;
+
+    QString m_wordLanguage = "English";
 };
 #endif

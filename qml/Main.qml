@@ -60,7 +60,7 @@ Window{
 
 
                     onClicked: {
-                        //stackView.push("")
+                        stackViewMain.push("pages/StatsPage.qml")
                     }
 
                 }
@@ -80,7 +80,7 @@ Window{
 
 
                     onClicked: {
-                        //stackView.push("")
+                        stackViewMain.push("pages/SettingsPage.qml")
                     }
                 }
             }
