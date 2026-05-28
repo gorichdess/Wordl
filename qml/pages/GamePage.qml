@@ -39,12 +39,16 @@ Page {
             Layout.alignment: Qt.AlignHCenter
             currentAttempt: gameController.currentAttempt
             inputText: gameController.currentInput
+
+            boardModel: gameController.boardModel
         }
 
         GameKeyboard {
             id: gameKeyboard
+            keyboardModel: gameController.keyboardModel
 
             Layout.alignment: Qt.AlignHCenter
+
             onLetterPressed: function(letter) {
                 gameController.appendLetter(letter)
             }
@@ -78,24 +82,7 @@ Page {
 
 
                 onClicked: {
-                    var guess = gameController.currentInput.toUpperCase();
-                    var startIdx = gameController.currentAttempt * 5;
-
-                    var statuses = gameController.submitGuess();
-
-                    if (statuses.length === 5) {
-                        for (var i = 0; i < 5; i++) {
-                            var cellIdx = startIdx + i;
-                            var currentCell = gameBoard.getCell(cellIdx);
-                            var letter = guess.charAt(i);
-
-                            if (currentCell) {
-                                currentCell.savedLetter = letter;
-                                currentCell.status = statuses[i];
-                                gameKeyboard.updateKey(letter, statuses[i]);
-                            }
-                        }
-                    }
+                    gameController.submitGuess();
                 }
             }
 
@@ -115,8 +102,6 @@ Page {
 
                 onClicked: {
                     gameController.resetGame();
-                    gameBoard.clearBoard();
-                    gameKeyboard.clearKeys();
                 }
 
             }

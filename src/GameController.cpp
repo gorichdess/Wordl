@@ -6,6 +6,8 @@ GameController::GameController(QObject *parent)
     , m_currentAttempt(0)
     , m_currentInput("")
 {
+    m_boardModel = new BoardModel(this);
+    m_keyboardModel = new KeyboardModel(this);
 }
 
 QString GameController::secretWord() const { return m_secretWord; }
@@ -46,16 +48,27 @@ void GameController::removeLastLetter()
     }
 }
 
-QVariantList GameController::submitGuess()
+BoardModel* GameController::boardModel() const
 {
-    QVariantList results;
+    return m_boardModel;
+}
 
+KeyboardModel* GameController::keyboardModel() const
+{
+    return m_keyboardModel;
+}
+
+void GameController::submitGuess()
+{
     if (m_currentInput.length() != m_maxWordLength || m_currentAttempt >= m_maxAttempts) {
-        return results;
+        return;
     }
 
+    int startIdx = m_currentAttempt * m_maxWordLength;
+    QString guess = m_currentInput.toUpper();
+
     for (int i = 0; i < m_maxWordLength; ++i) {
-        QChar guessChar = m_currentInput[i];
+        QChar guessChar = guess[i];
         int status = 1; // Default: ABSENT
 
         if (guessChar == m_secretWord[i]) {
@@ -63,7 +76,10 @@ QVariantList GameController::submitGuess()
         } else if (m_secretWord.contains(guessChar)) {
             status = 2; // PRESENT
         }
-        results.append(status);
+
+        int cellIdx = startIdx + i;
+        m_boardModel->setCell(cellIdx, guessChar, status);
+        m_keyboardModel->updateKey(guessChar, status);
     }
 
     m_currentAttempt++;
@@ -71,14 +87,15 @@ QVariantList GameController::submitGuess()
 
     emit currentAttemptChanged();
     emit currentInputChanged();
-
-    return results;
 }
 
 void GameController::resetGame()
 {
     m_currentInput = "";
-        m_currentAttempt = 0;
-        emit currentInputChanged();
+    m_currentAttempt = 0;
+    m_boardModel->clear();
+    m_keyboardModel->clear();
+
+    emit currentInputChanged();
     emit currentAttemptChanged();
 }

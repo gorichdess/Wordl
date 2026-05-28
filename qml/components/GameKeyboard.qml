@@ -7,6 +7,8 @@ ColumnLayout {
     spacing: 8
     Layout.alignment: Qt.AlignHCenter
 
+    property var keyboardModel
+
     signal letterPressed(string letter)
     signal enterPressed()
     signal backspacePressed()
@@ -14,13 +16,18 @@ ColumnLayout {
     RowLayout {
         Layout.alignment: Qt.AlignHCenter
         spacing: 6
+
         Repeater {
-            model: ["Q","W","E","R","T","Y","U","I","O","P"]
+            model: root.keyboardModel
 
             KeyboardButton {
-                objectName: modelData
-                keyText: modelData
-                onClicked: root.letterPressed(modelData)
+                visible: index >= 0 && index < 10
+                Layout.preferredWidth: visible ? 50 : 0
+
+                keyText: model.letter
+                keyStatus: model.status
+
+                onClicked: root.letterPressed(model.letter)
             }
         }
     }
@@ -28,13 +35,18 @@ ColumnLayout {
     RowLayout {
         Layout.alignment: Qt.AlignHCenter
         spacing: 6
+
         Repeater {
-            model: ["A","S","D","F","G","H","J","K","L"]
+            model: root.keyboardModel
 
             KeyboardButton {
-                objectName: modelData
-                keyText: modelData
-                onClicked: root.letterPressed(modelData)
+                visible: index >= 10 && index < 19
+                Layout.preferredWidth: visible ? 50 : 0
+
+                keyText: model.letter
+                keyStatus: model.status
+
+                onClicked: root.letterPressed(model.letter)
             }
         }
     }
@@ -42,50 +54,25 @@ ColumnLayout {
     RowLayout {
         Layout.alignment: Qt.AlignHCenter
         spacing: 6
+
         Repeater {
-            model: ["Z","X","C","V","B","N","M"]
+            model: root.keyboardModel
 
             KeyboardButton {
-                objectName: modelData
-                keyText: modelData
-                onClicked: root.letterPressed(modelData)
+                visible: index >= 19 && index < 26
+                Layout.preferredWidth: visible ? 50 : 0
+
+                keyText: model.letter
+                keyStatus: model.status
+
+                onClicked: root.letterPressed(model.letter)
             }
         }
 
         KeyboardButton {
             keyText: "-"
-            width: 70
-            onClicked: backspacePressed()
+            Layout.preferredWidth: 70
+            onClicked: root.backspacePressed()
         }
-    }
-
-    function updateKey(letter, status) {
-        var buttons = root.children
-
-        function search(item) {
-            if (item.objectName === letter && item.keyStatus !== undefined) {
-                item.keyStatus = Math.max(item.keyStatus, status)
-            }
-
-            for (var i = 0; i < item.children.length; i++) {
-                search(item.children[i])
-            }
-        }
-
-        search(root)
-    }
-
-    function clearKeys() {
-        function clearItem(item){
-            if (item.keyStatus !== undefined) {
-                item.keyStatus = 0
-            }
-
-            for (var i = 0; i < item.children.length; i++) {
-                clearItem(item.children[i])
-            }
-        }
-
-        clearItem(root)
     }
 }

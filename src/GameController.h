@@ -5,6 +5,8 @@
 #include <QString>
 #include <QVector>
 #include <QtQml/QQmlEngine>
+#include "BoardModel.h"
+#include "KeyboardModel.h"
 
 class GameController : public QObject
 {
@@ -12,6 +14,9 @@ class GameController : public QObject
     Q_PROPERTY(QString secretWord READ secretWord NOTIFY secretWordChanged)
     Q_PROPERTY(int currentAttempt READ currentAttempt NOTIFY currentAttemptChanged)
     Q_PROPERTY(QString currentInput READ currentInput WRITE setCurrentInput NOTIFY currentInputChanged)
+
+    Q_PROPERTY(BoardModel* boardModel READ boardModel CONSTANT)
+    Q_PROPERTY(KeyboardModel* keyboardModel READ keyboardModel CONSTANT)
 
 public:
 
@@ -25,9 +30,12 @@ public:
     QString currentInput() const;
     void setCurrentInput(const QString &input);
 
+    BoardModel* boardModel() const;
+    KeyboardModel* keyboardModel() const;
+
     Q_INVOKABLE void appendLetter(const QString &letter);
     Q_INVOKABLE void removeLastLetter();
-    Q_INVOKABLE QVariantList submitGuess();
+    Q_INVOKABLE void submitGuess();
     Q_INVOKABLE void resetGame();
 
 signals:
@@ -41,5 +49,8 @@ private:
     QString m_currentInput;
     const int m_maxWordLength = 5;
     const int m_maxAttempts = 5;
+
+    BoardModel *m_boardModel;
+    KeyboardModel *m_keyboardModel;
 };
 #endif

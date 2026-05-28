@@ -14,6 +14,8 @@ qt_policy(SET QTP0004 NEW)
 qt_add_executable(WordlClone
   main.cpp
   src/GameController.cpp
+  src/BoardModel.cpp
+  src/KeyboardModel.cpp
 )
 
 set_source_files_properties(qml/components/Theme.qml

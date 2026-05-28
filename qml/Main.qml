@@ -39,7 +39,9 @@ Window{
 
 
                     onClicked: {
-                        stackViewMain.push("pages/GamePage.qml")
+                        stackViewMain.push("pages/GamePage.qml", {
+                            gameController: gameController
+                        })
                     }
                 }
 
