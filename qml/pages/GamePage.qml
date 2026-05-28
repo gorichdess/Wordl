@@ -36,6 +36,75 @@ Page {
 
     }
 
+    Dialog {
+        id: resultDialog
+
+        background: Rectangle {
+            color: Theme.pageBackgroundColor
+        }
+
+        modal: true
+        anchors.centerIn: parent
+
+        property string resultText: ""
+
+        title: "Game result"
+        standardButtons: Dialog.Ok
+
+        contentItem: AppText {
+            text: resultDialog.resultText
+            font.pointSize: 18
+            color: Theme.textOnLightBg
+        }
+
+        onAccepted: {
+            gameController.resetGame()
+        }
+    }
+
+    Dialog {
+        id: invalidWordDialog
+
+        background: Rectangle {
+            color: Theme.pageBackgroundColor
+        }
+
+        modal: true
+        anchors.centerIn: parent
+
+        property string resultText: ""
+
+        title: "Invalid word"
+        standardButtons: Dialog.Ok
+
+        contentItem: AppText {
+            text: invalidWordDialog.resultText
+            font.pointSize: 18
+            color: Theme.textOnLightBg
+        }
+    }
+
+    Connections {
+        target: gameController
+
+        function onGameWon(word) {
+            resultDialog.title = "You won!"
+            resultDialog.resultText = "Congratulations! The word was: " + word
+            resultDialog.open()
+        }
+
+        function onGameLost(word) {
+            resultDialog.title = "You lost!"
+            resultDialog.resultText = "The word was: " + word
+            resultDialog.open()
+        }
+
+        function onInvalidWord(word) {
+            invalidWordDialog.resultText = word + " is not in the word list"
+            invalidWordDialog.open()
+        }
+    }
+
     ColumnLayout{
         anchors.centerIn: parent
         spacing: 20

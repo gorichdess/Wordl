@@ -7,13 +7,14 @@
 #include <QtQml/QQmlEngine>
 #include "BoardModel.h"
 #include "KeyboardModel.h"
+#include "DatabaseManager.h"
 
 class GameController : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString secretWord READ secretWord NOTIFY secretWordChanged)
     Q_PROPERTY(int currentAttempt READ currentAttempt NOTIFY currentAttemptChanged)
-    Q_PROPERTY(QString currentInput READ currentInput WRITE setCurrentInput NOTIFY currentInputChanged)
+    Q_PROPERTY(QString currentInput READ currentInput NOTIFY currentInputChanged)
 
     Q_PROPERTY(BoardModel* boardModel READ boardModel CONSTANT)
     Q_PROPERTY(KeyboardModel* keyboardModel READ keyboardModel CONSTANT)
@@ -30,7 +31,6 @@ public:
     int currentAttempt() const;
 
     QString currentInput() const;
-    void setCurrentInput(const QString &input);
 
     BoardModel* boardModel() const;
     KeyboardModel* keyboardModel() const;
@@ -48,6 +48,9 @@ signals:
     void currentAttemptChanged();
     void currentInputChanged();
     void wordLanguageChanged();
+    void invalidWord(QString word);
+    void gameWon(QString word);
+    void gameLost(QString word);
 
 private:
     QString m_secretWord;
@@ -58,6 +61,7 @@ private:
 
     BoardModel *m_boardModel;
     KeyboardModel *m_keyboardModel;
+    DatabaseManager *m_databaseManager;
 
     QString m_wordLanguage = "English";
 };

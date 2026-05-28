@@ -16,6 +16,13 @@ qt_add_executable(WordlClone
   src/GameController.cpp
   src/BoardModel.cpp
   src/KeyboardModel.cpp
+  src/DatabaseManager.cpp
+)
+
+add_custom_command(TARGET WordlClone POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/data
+        $<TARGET_FILE_DIR:WordlClone>/data
 )
 
 set_source_files_properties(qml/components/Theme.qml
