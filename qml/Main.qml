@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import "components"
 
 Window{
     width : 700
@@ -15,21 +16,26 @@ Window{
 
     Component {
         id: mainPage
+
         Page {
             width: stackViewMain.width
             height: stackViewMain.height
+
+            background: Rectangle {
+                color: Theme.pageBackgroundColor
+            }
 
             Column {
                 anchors.centerIn: parent
                 anchors.topMargin: 20
                 spacing: 15
 
-                Button{
+                AppButton{
                     id: newGameButton
                     width: 250
                     height: 50
 
-                    Text{
+                    AppText{
                         id: newGameText
                         text : "New Game"
                         anchors.centerIn: parent
@@ -45,12 +51,12 @@ Window{
                     }
                 }
 
-                Button{
+                AppButton{
                     id: statsPageButton
                     width: 250
                     height: 50
 
-                    Text{
+                    AppText{
                         id: statsPageText
                         text : "Stats"
                         anchors.centerIn: parent
@@ -65,12 +71,12 @@ Window{
 
                 }
 
-                Button{
+                AppButton{
                     id: settingsPageButton
                     width: 250
                     height: 50
 
-                    Text{
+                    AppText{
                         id: settingsPageText
                         text : "Settings"
                         anchors.centerIn: parent

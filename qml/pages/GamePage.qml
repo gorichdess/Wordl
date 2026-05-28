@@ -5,16 +5,22 @@ import "../components"  //whyyyy import "WordlClone" doesnt work??
 
 Page {
     id: gamePage
+
+    background: Rectangle {
+        color: Theme.pageBackgroundColor
+    }
+
     width: stackViewMain.width
     height: stackViewMain.height
 
-    Button {
+    AppButton {
         id: back
         width: 30
         height: 30
 
-        Text{
+        AppText{
             text: "X"
+            color: Theme.textOnLightBg
             anchors.centerIn: parent
             font.pointSize: 15
             font.bold: true
@@ -66,14 +72,16 @@ Page {
             Layout.preferredWidth: 400
             Layout.alignment: Qt.AlignHCenter
 
-            Button{
+            AppButton{
                 id: submitWordButton
+
                 Layout.fillWidth: true
                 Layout.preferredHeight: 50
                 enabled: gameController.currentInput.length === 5 && gameController.currentAttempt < 5
 
-                Text{
+                AppText{
                     id: submitWordText
+                    color: Theme.textOnLightBg
                     text : "Submit"
                     anchors.centerIn: parent
                     font.pointSize: 20
@@ -86,13 +94,15 @@ Page {
                 }
             }
 
-            Button{
+            AppButton{
                 id: newGameButton
+
                 Layout.fillWidth: true
                 Layout.preferredHeight: 50
 
-                Text{
+                AppText{
                     id: newGameText
+                    color: Theme.textOnLightBg
                     text : "New Game"
                     anchors.centerIn: parent
                     font.pointSize: 20

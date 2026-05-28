@@ -6,18 +6,21 @@ import "../components"
 Page {
     id: settingsPage
 
+    background: Rectangle {
+        color: Theme.pageBackgroundColor
+    }
+
     width: stackViewMain.width
     height: stackViewMain.height
 
-    Button {
+    AppButton {
         id: back
         width: 30
         height: 30
 
-        Text{
+        AppText{
             text: "X"
             anchors.centerIn: parent
-            font.pointSize: 15
             font.bold: true
         }
 
@@ -34,25 +37,38 @@ Page {
         anchors.centerIn: parent
         spacing: 20
 
-        Text {
+        AppText {
             text: "Word language"
-            font.pointSize: 17
         }
 
         ComboBox {
             id: languageBox
-            font.pointSize: 17
-            anchors.centerIn: parent
-            model: ["English", "Deutsch", "Русский", "Українська"]
 
+            model: ["English", "Deutsch", "Русский", "Українська"]
             currentIndex: model.indexOf(gameController.wordLanguage)
+
+            font.pointSize: 17
+
+            background: Rectangle {
+                color: Theme.pageBackgroundColor
+                border.color: Theme.defaultKeyColor
+                radius: 4
+            }
+
+            contentItem: Text {
+                text: languageBox.displayText
+                color: Theme.textOnLightBg
+                font: languageBox.font
+                verticalAlignment: Text.AlignVCenter
+                leftPadding: 10
+            }
 
             onActivated: {
                 gameController.wordLanguage = currentText
             }
         }
 
-        Text {
+        AppText {
             text: "Selected: " + gameController.wordLanguage
             font.pointSize: 17
         }

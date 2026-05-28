@@ -36,7 +36,7 @@ Rectangle {
         return "transparent"
     }
 
-    Text {
+    AppText {
         text: box.letter.toUpperCase()
         anchors.centerIn: parent
         font.pointSize: 22

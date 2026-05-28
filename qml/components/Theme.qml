@@ -8,8 +8,11 @@ QtObject {
     readonly property color absentColor: "#787c7e"
     readonly property color emptyBorderColor: "#d3d6da"
     readonly property color typedBorderColor: "#878a8c"
+    readonly property color pressedButtonColor: "#c0c0c0"
     readonly property color defaultKeyColor: "#d3d6da"
 
     readonly property color textOnLightBg: "#000000"
     readonly property color textOnDarkBg: "#ffffff"
+
+    readonly property color pageBackgroundColor: "#ffffff"
 }

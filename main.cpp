@@ -2,11 +2,11 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 
-#include <src/GameController.h>
+#include "src/GameController.h"
 
 int main(int argc,char * argv[]){
 
-    //qputenv("QT_QUICK_CONTROLS_STYLE", "Basic");
+    qputenv("QT_QUICK_CONTROLS_STYLE", "Basic");
 
     QGuiApplication app(argc,argv);
 

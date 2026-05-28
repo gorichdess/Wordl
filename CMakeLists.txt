@@ -4,7 +4,7 @@ project(QmlApp LANGUAGES CXX)
  
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
  
-find_package(Qt6 6.4 REQUIRED COMPONENTS Quick)
+find_package(Qt6 6.4 REQUIRED COMPONENTS Quick Sql)
  
 qt_standard_project_setup()
 
@@ -37,11 +37,15 @@ qt_add_qml_module(WordlClone
         qml/components/KeyboardButton.qml
         qml/components/GameKeyboard.qml
         qml/components/Theme.qml
+        qml/components/AppButton.qml
+        qml/components/AppText.qml
 )
 
  
 target_link_libraries(WordlClone
-    PRIVATE Qt6::Quick
+    PRIVATE
+        Qt6::Quick
+        Qt6::Sql
 )
  
 include(GNUInstallDirs)

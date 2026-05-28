@@ -6,18 +6,21 @@ import "../components"
 Page {
     id: statsPage
 
+    background: Rectangle {
+        color: Theme.pageBackgroundColor
+    }
+
     width: stackViewMain.width
     height: stackViewMain.height
 
-    Button {
+    AppButton {
         id: back
         width: 30
         height: 30
 
-        Text{
+        AppText{
             text: "X"
             anchors.centerIn: parent
-            font.pointSize: 15
             font.bold: true
         }
 
@@ -35,7 +38,7 @@ Page {
         anchors.centerIn: parent
         spacing: 25
 
-        Text {
+        AppText {
             text: "Statistics"
             font.pointSize: 28
             font.bold: true
@@ -48,78 +51,69 @@ Page {
             columnSpacing: 40
             Layout.alignment: Qt.AlignHCenter
 
-            Text {
+            AppText {
                 text: "Games played:"
-                font.pointSize: 16
             }
 
-            Text {
+            AppText {
                 text: "0"
-                font.pointSize: 16
                 font.bold: true
             }
 
-            Text {
+            AppText {
                 text: "Games won:"
-                font.pointSize: 16
             }
 
-            Text {
+            AppText {
                 text: "0"
-                font.pointSize: 16
                 font.bold: true
             }
 
-            Text {
+            AppText {
                 text: "Games lost:"
-                font.pointSize: 16
             }
 
-            Text {
+            AppText {
                 text: "0"
-                font.pointSize: 16
                 font.bold: true
             }
 
-            Text {
+            AppText {
                 text: "Win rate:"
-                font.pointSize: 16
             }
 
-            Text {
+            AppText {
                 text: "0%"
-                font.pointSize: 16
                 font.bold: true
             }
 
-            Text {
+            AppText {
                 text: "Current streak:"
-                font.pointSize: 16
             }
 
-            Text {
+            AppText {
                 text: "0"
-                font.pointSize: 16
                 font.bold: true
             }
 
-            Text {
+            AppText {
                 text: "Best streak:"
-                font.pointSize: 16
             }
 
-            Text {
+            AppText {
                 text: "0"
-                font.pointSize: 16
                 font.bold: true
             }
         }
 
-        Button {
-            text: "Reset statistics"
+        AppButton {
+            AppText{
+                text:"Reset statistics"
+                anchors.centerIn: parent
+                font.bold: true
+            }
             Layout.preferredWidth: 220
             Layout.preferredHeight: 45
-            font.pointSize: 16
 
             onClicked: {
                 //TODO

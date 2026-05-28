@@ -2,13 +2,18 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-Button {
+AppButton {
     id: root
 
     property string keyText: ""
     property int keyStatus: 0
 
-    text: keyText
+    AppText{
+        text: keyText
+        anchors.centerIn: parent
+        font.bold: true
+        font.pointSize: 20
+    }
 
     background: Rectangle {
             radius: 4
