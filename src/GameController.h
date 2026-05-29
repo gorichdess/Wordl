@@ -8,6 +8,7 @@
 #include "BoardModel.h"
 #include "KeyboardModel.h"
 #include "DatabaseManager.h"
+#include "StatisticsManager.h"
 
 class GameController : public QObject
 {
@@ -20,6 +21,8 @@ class GameController : public QObject
     Q_PROPERTY(KeyboardRowModel* keyboardModel READ keyboardModel CONSTANT)
 
     Q_PROPERTY(QString wordLanguage READ wordLanguage WRITE setWordLanguage NOTIFY wordLanguageChanged)
+
+    Q_PROPERTY(StatisticsManager* statistics READ statistics CONSTANT)
 
 public:
 
@@ -34,6 +37,7 @@ public:
 
     BoardModel* boardModel() const;
     KeyboardRowModel* keyboardModel() const;
+    StatisticsManager* statistics() const;
 
     QString wordLanguage() const;
     void setWordLanguage(const QString &language);
@@ -62,6 +66,7 @@ private:
     BoardModel *m_boardModel;
     KeyboardRowModel *m_keyboardModel;
     DatabaseManager *m_databaseManager;
+    StatisticsManager *m_statisticsManager;
 
     QString m_wordLanguage = "English";
 };

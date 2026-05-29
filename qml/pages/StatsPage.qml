@@ -17,6 +17,7 @@ Page {
         id: back
         width: 30
         height: 30
+        z: 10
 
         AppText{
             text: "X"
@@ -35,8 +36,10 @@ Page {
     }
 
     ColumnLayout {
+
         anchors.centerIn: parent
-        spacing: 25
+        spacing: 20
+        width: parent.width * 0.8
 
         AppText {
             text: "Statistics"
@@ -44,6 +47,22 @@ Page {
             font.bold: true
             Layout.alignment: Qt.AlignHCenter
         }
+
+        ComboBox {
+            id: statsBox
+
+            model: ["English", "Deutsch", "Русский", "Українська", "General"]
+            Layout.alignment: Qt.AlignHCenter
+
+            background: Rectangle {
+                implicitWidth: 150
+                implicitHeight: 40
+                color: Theme.pageBackgroundColor
+                border.color: Theme.defaultKeyColor
+                radius: 4
+            }
+        }
+
 
         GridLayout {
             columns: 2
@@ -56,7 +75,7 @@ Page {
             }
 
             AppText {
-                text: "0"
+                text: gameController.statistics.getGamesPlayed(statsBox.currentText)
                 font.bold: true
             }
 
@@ -65,7 +84,7 @@ Page {
             }
 
             AppText {
-                text: "0"
+                text: gameController.statistics.getGamesWon(statsBox.currentText)
                 font.bold: true
             }
 
@@ -74,7 +93,7 @@ Page {
             }
 
             AppText {
-                text: "0"
+                text: gameController.statistics.getGamesLost(statsBox.currentText)
                 font.bold: true
             }
 
@@ -83,7 +102,7 @@ Page {
             }
 
             AppText {
-                text: "0%"
+                text: gameController.statistics.getWinRate(statsBox.currentText)
                 font.bold: true
             }
 
@@ -92,7 +111,7 @@ Page {
             }
 
             AppText {
-                text: "0"
+                text: gameController.statistics.getCurrentStreak(statsBox.currentText)
                 font.bold: true
             }
 
@@ -101,7 +120,7 @@ Page {
             }
 
             AppText {
-                text: "0"
+                text: gameController.statistics.getBestStreak(statsBox.currentText)
                 font.bold: true
             }
         }
@@ -116,7 +135,7 @@ Page {
             Layout.preferredHeight: 45
 
             onClicked: {
-                //TODO
+                gameController.statistics.resetResults(statsBox.currentText)
             }
         }
     }

@@ -10,6 +10,9 @@ GameController::GameController(QObject *parent)
     m_keyboardModel = new KeyboardRowModel(this);
     m_databaseManager = new DatabaseManager();
 
+    m_statisticsManager = new StatisticsManager(this);
+    m_statisticsManager->openDatabase();
+
     if (m_databaseManager->openDatabase()) {
         m_secretWord = m_databaseManager->getRandomWord(m_wordLanguage);
     }
@@ -93,8 +96,10 @@ void GameController::submitGuess()
     emit currentInputChanged();
 
     if (isWin) {
+        m_statisticsManager->setGameWon(m_wordLanguage);
         emit gameWon(m_secretWord);
     } else if (m_currentAttempt >= m_maxAttempts) {
+        m_statisticsManager->setGameLost(m_wordLanguage);
         emit gameLost(m_secretWord);
     }
 }
@@ -132,4 +137,9 @@ void GameController::setWordLanguage(const QString &language)
     emit wordLanguageChanged();
 
     resetGame();
+}
+
+StatisticsManager* GameController::statistics() const
+{
+    return m_statisticsManager;
 }

@@ -84,6 +84,8 @@ void DatabaseManager::importWordsFromFile(const QString &filePath, const QString
 
     QTextStream stream(&file);
 
+    stream.setEncoding(QStringConverter::Utf8);
+
     int imported = 0;
 
     while (!stream.atEnd()) {

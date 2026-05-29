@@ -17,6 +17,7 @@ qt_add_executable(WordlClone
   src/BoardModel.cpp
   src/KeyboardModel.cpp
   src/DatabaseManager.cpp
+  src/StatisticsManager.cpp
 )
 
 add_custom_command(TARGET WordlClone POST_BUILD

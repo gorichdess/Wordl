@@ -50,6 +50,8 @@ Page {
             font.pointSize: 17
 
             background: Rectangle {
+                implicitWidth: 150
+                implicitHeight: 40
                 color: Theme.pageBackgroundColor
                 border.color: Theme.defaultKeyColor
                 radius: 4
