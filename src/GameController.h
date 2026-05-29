@@ -17,7 +17,7 @@ class GameController : public QObject
     Q_PROPERTY(QString currentInput READ currentInput NOTIFY currentInputChanged)
 
     Q_PROPERTY(BoardModel* boardModel READ boardModel CONSTANT)
-    Q_PROPERTY(KeyboardModel* keyboardModel READ keyboardModel CONSTANT)
+    Q_PROPERTY(KeyboardRowModel* keyboardModel READ keyboardModel CONSTANT)
 
     Q_PROPERTY(QString wordLanguage READ wordLanguage WRITE setWordLanguage NOTIFY wordLanguageChanged)
 
@@ -33,7 +33,7 @@ public:
     QString currentInput() const;
 
     BoardModel* boardModel() const;
-    KeyboardModel* keyboardModel() const;
+    KeyboardRowModel* keyboardModel() const;
 
     QString wordLanguage() const;
     void setWordLanguage(const QString &language);
@@ -60,7 +60,7 @@ private:
     const int m_maxAttempts = 5;
 
     BoardModel *m_boardModel;
-    KeyboardModel *m_keyboardModel;
+    KeyboardRowModel *m_keyboardModel;
     DatabaseManager *m_databaseManager;
 
     QString m_wordLanguage = "English";

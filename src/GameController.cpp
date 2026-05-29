@@ -7,7 +7,7 @@ GameController::GameController(QObject *parent)
     , m_currentInput("")
 {
     m_boardModel = new BoardModel(this);
-    m_keyboardModel = new KeyboardModel(this);
+    m_keyboardModel = new KeyboardRowModel(this);
     m_databaseManager = new DatabaseManager();
 
     if (m_databaseManager->openDatabase()) {
@@ -50,7 +50,7 @@ BoardModel* GameController::boardModel() const
     return m_boardModel;
 }
 
-KeyboardModel* GameController::keyboardModel() const
+KeyboardRowModel* GameController::keyboardModel() const
 {
     return m_keyboardModel;
 }
@@ -127,6 +127,8 @@ void GameController::setWordLanguage(const QString &language)
         return;
 
     m_wordLanguage = language;
+    m_keyboardModel->setLanguage(language);
+
     emit wordLanguageChanged();
 
     resetGame();

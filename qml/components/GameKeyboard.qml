@@ -7,7 +7,7 @@ ColumnLayout {
     spacing: 8
     Layout.alignment: Qt.AlignHCenter
 
-    property var keyboardModel
+    property var keyboardRowModel
 
     signal letterPressed(string letter)
     signal enterPressed()
@@ -18,10 +18,9 @@ ColumnLayout {
         spacing: 6
 
         Repeater {
-            model: root.keyboardModel
+            model: root.keyboardRowModel.row0
 
             KeyboardButton {
-                visible: index >= 0 && index < 10
                 Layout.preferredWidth: visible ? 50 : 0
 
                 keyText: model.letter
@@ -37,10 +36,9 @@ ColumnLayout {
         spacing: 6
 
         Repeater {
-            model: root.keyboardModel
+            model: root.keyboardRowModel.row1
 
             KeyboardButton {
-                visible: index >= 10 && index < 19
                 Layout.preferredWidth: visible ? 50 : 0
 
                 keyText: model.letter
@@ -56,10 +54,9 @@ ColumnLayout {
         spacing: 6
 
         Repeater {
-            model: root.keyboardModel
+            model: root.keyboardRowModel.row2
 
             KeyboardButton {
-                visible: index >= 19 && index < 26
                 Layout.preferredWidth: visible ? 50 : 0
 
                 keyText: model.letter

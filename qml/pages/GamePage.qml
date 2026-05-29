@@ -33,7 +33,6 @@ Page {
                 stackViewMain.pop()
             }
         }
-
     }
 
     Dialog {
@@ -43,13 +42,44 @@ Page {
             color: Theme.pageBackgroundColor
         }
 
+        padding: 20
+
+        header: Item {
+            implicitHeight: 40
+            AppText {
+                text: resultDialog.title
+                anchors.centerIn: parent
+                font.pointSize: 18
+                font.bold: true
+                color: Theme.textOnLightBg
+                anchors.verticalCenter: parent.verticalCenter
+            }
+        }
+
+        footer: Item {
+            implicitHeight: 50
+
+            AppButton {
+                AppText{
+                    text: "OK"
+                    anchors.centerIn: parent
+                    font.bold: true
+                }
+                width: 50
+                height: 35
+
+                anchors.right: parent.right
+                anchors.centerIn: parent
+                onClicked: resultDialog.accept()
+            }
+        }
+
         modal: true
         anchors.centerIn: parent
 
         property string resultText: ""
 
         title: "Game result"
-        standardButtons: Dialog.Ok
 
         contentItem: AppText {
             text: resultDialog.resultText
@@ -67,6 +97,38 @@ Page {
 
         background: Rectangle {
             color: Theme.pageBackgroundColor
+        }
+
+        padding: 20
+
+        header: Item {
+            implicitHeight: 40
+            AppText {
+                text: invalidWordDialog.title
+                anchors.centerIn: parent
+                font.pointSize: 18
+                font.bold: true
+                color: Theme.textOnLightBg
+                anchors.verticalCenter: parent.verticalCenter
+            }
+        }
+
+        footer: Item {
+            implicitHeight: 50
+
+            AppButton {
+                AppText{
+                    text: "OK"
+                    anchors.centerIn: parent
+                    font.bold: true
+                }
+                width: 50
+                height: 35
+
+                anchors.right: parent.right
+                anchors.centerIn: parent
+                onClicked: invalidWordDialog.accept()
+            }
         }
 
         modal: true
@@ -120,7 +182,7 @@ Page {
 
         GameKeyboard {
             id: gameKeyboard
-            keyboardModel: gameController.keyboardModel
+            keyboardRowModel: gameController.keyboardModel
 
             Layout.alignment: Qt.AlignHCenter
 
