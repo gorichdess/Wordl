@@ -24,7 +24,17 @@ bool DatabaseManager::openDatabase()
     if (isWordTableEmpty("English")) {
         importWordsFromFile("data/english_words.txt", "English");
     }
-    //TODO LATER ANOTHER LANGUAGES
+    if (isWordTableEmpty("Deutsch")) {
+        importWordsFromFile("data/german_words.txt", "Deutsch");
+    }
+
+    if (isWordTableEmpty("Русский")) {
+        importWordsFromFile("data/russian_words.txt", "Русский");
+    }
+
+    if (isWordTableEmpty("Українська")) {
+        importWordsFromFile("data/ukrainian_words.txt", "Українська");
+    }
 
     return true;
 }
@@ -37,7 +47,8 @@ void DatabaseManager::createTables()
             "CREATE TABLE IF NOT EXISTS words ("
             "id INTEGER PRIMARY KEY AUTOINCREMENT,"
             "word TEXT NOT NULL,"
-            "language TEXT NOT NULL"
+            "language TEXT NOT NULL,"
+            "UNIQUE(word, language)"
             ")"
             )) {
         qDebug() << "Create table error:" << query.lastError().text();
@@ -71,10 +82,9 @@ void DatabaseManager::importWordsFromFile(const QString &filePath, const QString
         return;
     }
 
-    QSqlQuery query;
-    query.prepare("INSERT INTO words (word, language) VALUES (?, ?)");
-
     QTextStream stream(&file);
+
+    int imported = 0;
 
     while (!stream.atEnd()) {
         QString word = stream.readLine().trimmed().toUpper();
@@ -83,13 +93,21 @@ void DatabaseManager::importWordsFromFile(const QString &filePath, const QString
             continue;
         }
 
+        QSqlQuery query;
+        query.prepare("INSERT OR IGNORE INTO words (word, language) VALUES (?, ?)");
+
         query.addBindValue(word);
         query.addBindValue(language);
 
         if (!query.exec()) {
             qDebug() << "Insert word error:" << query.lastError().text();
         }
+        else if (query.numRowsAffected() > 0) {
+            imported++;
+        }
     }
+
+    qDebug() << "Imported" << imported << "words for language" << language;
 
     file.close();
 }

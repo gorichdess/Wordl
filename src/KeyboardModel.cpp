@@ -102,8 +102,8 @@ void KeyboardRowModel::setLanguage(const QString &language)
     }
     else if (language == "Русский") {
         rows = {
-            "ЙЦУКЕНГШЩЗХЪ",
-            "ФЫВАПРОЛДЖЭ",
+            "ЙЦУКЕНГШЩЗХ",
+            "ФЫВАПРОЛДЖЭЁ",
             "ЯЧСМИТЬБЮ"
         };
     }
@@ -111,7 +111,7 @@ void KeyboardRowModel::setLanguage(const QString &language)
         rows = {
             "ЙЦУКЕНГШЩЗХЇ",
             "ФІВАПРОЛДЖЄ",
-            "ЯЧСМИТЬБЮ"
+            "ЯЧСМИТЬБЮҐ"
         };
     }
 
