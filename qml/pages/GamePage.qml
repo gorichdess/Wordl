@@ -35,114 +35,229 @@ Page {
         }
     }
 
-    Dialog {
+    AppButton {
+        width: 30
+        height: 30
+
+        anchors.top: parent.top
+        anchors.right: parent.right
+
+        AppText{
+            text: "?"
+            color: Theme.textOnLightBg
+            anchors.centerIn: parent
+            font.pointSize: 15
+            font.bold: true
+        }
+
+        onClicked: {
+            helpPopup.open()
+        }
+    }
+
+    Popup {
+        id: helpPopup
+        anchors.centerIn: parent
+        width: parent.width * 0.8
+        height: parent.height * 0.7
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+        background: Rectangle {
+            color: Theme.popupBg
+            radius: 10
+            border.width: 2
+        }
+
+        contentItem: ColumnLayout {
+            spacing: 15
+
+            Text {
+                text: "HOW TO PLAY"
+                color: Theme.textOnDarkBg
+                font.bold: true
+                font.pointSize: 18
+                Layout.alignment: Qt.AlignHCenter
+            }
+
+            Text {
+                text: "Guess the secret word within 5 attempts.\nAfter every attempt color of letters will change."
+                color: Theme.textPopup
+                font.pointSize: 12
+                wrapMode: Text.WordWrap
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignHCenter
+            }
+
+            RowLayout {
+                spacing: 10
+                Layout.alignment: Qt.AlignHCenter
+
+                Rectangle {
+                    width: 40; height: 40; color: Theme.correctColor
+                    Text { text: "A"; color: Theme.textOnDarkBg; anchors.centerIn: parent; font.bold: true }
+                }
+                Text { text: "Letter is in correct place."; color: Theme.textOnDarkBg }
+            }
+
+            RowLayout {
+                spacing: 10
+                Layout.alignment: Qt.AlignHCenter
+
+                Rectangle {
+                    width: 40; height: 40; color: Theme.presentColor
+                    Text { text: "В"; color: Theme.textOnDarkBg; anchors.centerIn: parent; font.bold: true }
+                }
+                Text { text: "Letter is not in correct place, but is in secret word"; color: Theme.textOnDarkBg }
+            }
+
+            RowLayout {
+                spacing: 10
+                Layout.alignment: Qt.AlignHCenter
+
+                Rectangle {
+                    width: 40; height: 40; color: Theme.absentColor
+                    Text { text: "C"; color: Theme.textOnDarkBg; anchors.centerIn: parent; font.bold: true }
+                }
+                Text { text: "Letter isnt in secret word."; color: Theme.textOnDarkBg }
+            }
+
+            RowLayout {
+                spacing: 10
+                Layout.alignment: Qt.AlignHCenter
+
+                Text { text: "\n If a letter is repeated multiple times in your guess,
+                              \n but appears only once in the secret word,
+                            \n only the first extra letter will be highlighted in yellow!"; color: Theme.textPopup; font.pointSize: 12}
+            }
+
+            Button {
+                text: "Ok"
+                Layout.alignment: Qt.AlignHCenter
+                onClicked: helpPopup.close()
+            }
+        }
+    }
+
+    Popup {
         id: resultDialog
 
         background: Rectangle {
             color: Theme.pageBackgroundColor
+            radius: 10
         }
 
         padding: 20
-
-        header: Item {
-            implicitHeight: 40
-            AppText {
-                text: resultDialog.title
-                anchors.centerIn: parent
-                font.pointSize: 18
-                font.bold: true
-                color: Theme.textOnLightBg
-                anchors.verticalCenter: parent.verticalCenter
-            }
-        }
-
-        footer: Item {
-            implicitHeight: 50
-
-            AppButton {
-                AppText{
-                    text: "OK"
-                    anchors.centerIn: parent
-                    font.bold: true
-                }
-                width: 50
-                height: 35
-
-                anchors.right: parent.right
-                anchors.centerIn: parent
-                onClicked: resultDialog.accept()
-            }
-        }
-
         modal: true
         anchors.centerIn: parent
 
         property string resultText: ""
+        property string title: "Game result"
 
-        title: "Game result"
+        contentItem: ColumnLayout {
+            spacing: 15
 
-        contentItem: AppText {
-            text: resultDialog.resultText
-            font.pointSize: 18
-            color: Theme.textOnLightBg
-        }
+            Item {
+                Layout.preferredHeight: 40
+                Layout.fillWidth: true
+                AppText {
+                    text: resultDialog.title
+                    anchors.centerIn: parent
+                    font.pointSize: 18
+                    font.bold: true
+                    color: Theme.textOnLightBg
+                }
+            }
 
-        onAccepted: {
-            gameController.resetGame()
+            AppText {
+                text: resultDialog.resultText
+                font.pointSize: 18
+                color: Theme.textOnLightBg
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignHCenter
+            }
+
+            Item {
+                Layout.preferredHeight: 50
+                Layout.fillWidth: true
+
+                AppButton {
+                    width: 50
+                    height: 35
+                    anchors.centerIn: parent
+
+                    AppText {
+                        text: "OK"
+                        anchors.centerIn: parent
+                        font.bold: true
+                    }
+
+                    onClicked: {
+                        resultDialog.close()
+                        gameController.resetGame()
+                    }
+                }
+            }
         }
     }
 
-    Dialog {
+    Popup {
         id: invalidWordDialog
 
         background: Rectangle {
             color: Theme.pageBackgroundColor
+            radius: 10
         }
 
         padding: 20
-
-        header: Item {
-            implicitHeight: 40
-            AppText {
-                text: invalidWordDialog.title
-                anchors.centerIn: parent
-                font.pointSize: 18
-                font.bold: true
-                color: Theme.textOnLightBg
-                anchors.verticalCenter: parent.verticalCenter
-            }
-        }
-
-        footer: Item {
-            implicitHeight: 50
-
-            AppButton {
-                AppText{
-                    text: "OK"
-                    anchors.centerIn: parent
-                    font.bold: true
-                }
-                width: 50
-                height: 35
-
-                anchors.right: parent.right
-                anchors.centerIn: parent
-                onClicked: invalidWordDialog.accept()
-            }
-        }
-
         modal: true
         anchors.centerIn: parent
 
         property string resultText: ""
+        property string title: "Invalid word"
 
-        title: "Invalid word"
-        standardButtons: Dialog.Ok
+        contentItem: ColumnLayout {
+            spacing: 15
 
-        contentItem: AppText {
-            text: invalidWordDialog.resultText
-            font.pointSize: 18
-            color: Theme.textOnLightBg
+            Item {
+                Layout.preferredHeight: 40
+                Layout.fillWidth: true
+                AppText {
+                    text: invalidWordDialog.title
+                    anchors.centerIn: parent
+                    font.pointSize: 18
+                    font.bold: true
+                    color: Theme.textOnLightBg
+                }
+            }
+
+            AppText {
+                text: invalidWordDialog.resultText
+                font.pointSize: 18
+                color: Theme.textOnLightBg
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignHCenter
+            }
+
+            Item {
+                Layout.preferredHeight: 50
+                Layout.fillWidth: true
+
+                AppButton {
+                    width: 50
+                    height: 35
+                    anchors.centerIn: parent
+
+                    AppText {
+                        text: "OK"
+                        anchors.centerIn: parent
+                        font.bold: true
+                    }
+
+                    onClicked: invalidWordDialog.close()
+                }
+            }
         }
     }
 

@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QString>
 #include <QVector>
+#include <QHash>
 #include <QtQml/QQmlEngine>
 #include "BoardModel.h"
 #include "KeyboardModel.h"

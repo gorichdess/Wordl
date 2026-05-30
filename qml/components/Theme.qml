@@ -14,5 +14,8 @@ QtObject {
     readonly property color textOnLightBg: "#000000"
     readonly property color textOnDarkBg: "#ffffff"
 
+    readonly property color popupBg: "#1e1e1e"
+    readonly property color textPopup: "#aaaaaa"
+
     readonly property color pageBackgroundColor: "#ffffff"
 }

@@ -72,19 +72,38 @@ void GameController::submitGuess()
         return;
     }
 
-    for (int i = 0; i < m_maxWordLength; ++i) {
-        QChar guessChar = guess[i];
-        int status = 1; // Default: ABSENT
+    QHash<QString, int> lettersLeft;
 
-        if (guessChar == m_secretWord[i]) {
-            status = 3; // CORRECT
-        } else if (m_secretWord.contains(guessChar)) {
-            status = 2; // PRESENT
+    for (int i = 0; i < m_maxWordLength; i++) {
+        lettersLeft[m_secretWord[i]]++;
+    }
+
+    QVector<int> statuses(m_maxWordLength, 1);
+
+    for (int i = 0; i < m_maxWordLength; ++i) { // first loop to find CORRRECT letters
+        if (guess[i] == m_secretWord[i]) {
+            statuses[i] = 3; // CORRECT
+            lettersLeft[guess[i]]--;
+        }
+    }
+
+    for (int i = 0; i < m_maxWordLength; ++i) {
+        if (statuses[i] == 3) {
+            continue;
         }
 
+        QChar guessChar = guess[i];
+
+        if (lettersLeft.contains(guessChar) && lettersLeft[guessChar] > 0) { // second loop to find PRESENT letters anf only if we still have some in hash
+            statuses[i] = 2; // PRESENT
+            lettersLeft[guessChar]--;
+        }
+    }
+
+    for (int i = 0; i < m_maxWordLength; ++i) {
         int cellIdx = startIdx + i;
-        m_boardModel->setCell(cellIdx, guessChar, status);
-        m_keyboardModel->updateKey(guessChar, status);
+        m_boardModel->setCell(cellIdx, guess[i], statuses[i]);
+        m_keyboardModel->updateKey(guess[i], statuses[i]);
     }
 
     bool isWin = guess == m_secretWord;

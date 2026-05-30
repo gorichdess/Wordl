@@ -1,10 +1,10 @@
 IMPORTANT
-- stat file for every language (DONE but needs to be tested more)
+- diff language interface
 -unit tests
 -android convert
 
 BETTER TO DO
 - find better database Or even better create owe  (FIXED A BIT)
-- better ai with animations:
+- better ui with animations:
         - pop up message instead of dialogue
 	- prettier buttons/ colors etc
