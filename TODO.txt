@@ -1,10 +1,10 @@
 IMPORTANT
 - diff language interface
--unit tests
+- fix with reset button
 -android convert
+- should i when reset statistic delete data from general?????
 
 BETTER TO DO
 - find better database Or even better create owe  (FIXED A BIT)
 - better ui with animations:
-        - pop up message instead of dialogue
 	- prettier buttons/ colors etc

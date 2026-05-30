@@ -30,9 +30,9 @@ void StatisticsManager::resetResults(const QString &language){
     }
 }
 
-bool StatisticsManager::openDatabase(){
-    m_stat_database = QSqlDatabase::addDatabase("QSQLITE", "statistics_connection");
-    m_stat_database.setDatabaseName("results.db");
+bool StatisticsManager::openDatabase(const QString &databaseName,const QString &connectionName){
+    m_stat_database = QSqlDatabase::addDatabase("QSQLITE", connectionName);
+    m_stat_database.setDatabaseName(databaseName);
 
     if (!m_stat_database.open()) {
         qDebug() << "Database error:" << m_stat_database.lastError().text();

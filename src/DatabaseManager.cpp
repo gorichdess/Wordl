@@ -9,10 +9,10 @@
 
 DatabaseManager::DatabaseManager(){}
 
-bool DatabaseManager::openDatabase()
+bool DatabaseManager::openDatabase(const QString &databaseName,const QString &connectionName)
 {
-    m_database = QSqlDatabase::addDatabase("QSQLITE");
-    m_database.setDatabaseName("wordle.db");
+    m_database = QSqlDatabase::addDatabase("QSQLITE", connectionName);
+    m_database.setDatabaseName(databaseName);
 
     if (!m_database.open()) {
         qDebug() << "Database error:" << m_database.lastError().text();
@@ -41,7 +41,7 @@ bool DatabaseManager::openDatabase()
 
 void DatabaseManager::createTables()
 {
-    QSqlQuery query;
+    QSqlQuery query(m_database);
 
     if (!query.exec(
             "CREATE TABLE IF NOT EXISTS words ("
@@ -57,7 +57,7 @@ void DatabaseManager::createTables()
 
 bool DatabaseManager::isWordTableEmpty(const QString &language)
 {
-    QSqlQuery query;
+    QSqlQuery query(m_database);
     query.prepare("SELECT COUNT(*) FROM words WHERE language = ?");
     query.addBindValue(language);
 
@@ -95,7 +95,7 @@ void DatabaseManager::importWordsFromFile(const QString &filePath, const QString
             continue;
         }
 
-        QSqlQuery query;
+        QSqlQuery query(m_database);
         query.prepare("INSERT OR IGNORE INTO words (word, language) VALUES (?, ?)");
 
         query.addBindValue(word);
@@ -116,7 +116,7 @@ void DatabaseManager::importWordsFromFile(const QString &filePath, const QString
 
 QString DatabaseManager::getRandomWord(const QString &language)
 {
-    QSqlQuery query;
+    QSqlQuery query(m_database);
     query.prepare(
         "SELECT word FROM words "
         "WHERE language = ? "
@@ -140,7 +140,7 @@ QString DatabaseManager::getRandomWord(const QString &language)
 
 bool DatabaseManager::wordExists(const QString &word, const QString &language)
 {
-    QSqlQuery query;
+    QSqlQuery query(m_database);
     query.prepare(
         "SELECT COUNT(*) FROM words "
         "WHERE word = ? AND language = ?"

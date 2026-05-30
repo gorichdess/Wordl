@@ -18,10 +18,10 @@ public:
     Q_INVOKABLE int getWinRate(const QString &language) const;
     Q_INVOKABLE int getCurrentStreak(const QString &language) const;
     Q_INVOKABLE int getBestStreak(const QString &language) const;
+    Q_INVOKABLE void resetResults(const QString &language);
 
-
-    void resetResults(const QString &language);
-    bool openDatabase();
+    bool openDatabase(const QString &databaseName = "results.db",
+                      const QString &connectionName = "statistics_connection");
 
     void setGameWon(const QString &language);
     void setGameLost(const QString &language);

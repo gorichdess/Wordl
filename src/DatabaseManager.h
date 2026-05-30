@@ -9,7 +9,8 @@ class DatabaseManager
 public:
     DatabaseManager();
 
-    bool openDatabase();
+    bool openDatabase(const QString &databaseName = "wordle.db",
+                      const QString &connectionName = "wordle_connection");
     void createTables();
 
     void importWordsFromFile(const QString &filePath, const QString &language);

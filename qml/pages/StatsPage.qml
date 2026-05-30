@@ -126,6 +126,7 @@ Page {
         }
 
         AppButton {
+            Layout.alignment: Qt.AlignHCenter
             AppText{
                 text:"Reset statistics"
                 anchors.centerIn: parent

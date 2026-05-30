@@ -4,7 +4,7 @@ project(QmlApp LANGUAGES CXX)
  
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
  
-find_package(Qt6 6.4 REQUIRED COMPONENTS Quick Sql)
+find_package(Qt6 6.4 REQUIRED COMPONENTS Quick Sql Test)
  
 qt_standard_project_setup()
 
@@ -56,6 +56,49 @@ target_link_libraries(WordlClone
         Qt6::Quick
         Qt6::Sql
 )
+
+enable_testing()
+
+add_executable(test_word_evaluator
+    tests/test_word_evaluator.cpp
+    src/WordEvaluator.cpp
+)
+
+target_link_libraries(test_word_evaluator
+    PRIVATE
+        Qt6::Test
+        Qt6::Core
+)
+
+add_test(NAME WordEvaluatorTest COMMAND test_word_evaluator)
+
+add_executable(test_statistics_manager
+    tests/test_statistics_manager.cpp
+    src/StatisticsManager.cpp
+)
+
+target_link_libraries(test_statistics_manager
+    PRIVATE
+        Qt6::Test
+        Qt6::Core
+        Qt6::Sql
+)
+
+add_test(NAME StatisticsManagerTest COMMAND test_statistics_manager)
+
+add_executable(test_database_manager
+    tests/test_database_manager.cpp
+    src/DatabaseManager.cpp
+)
+
+target_link_libraries(test_database_manager
+    PRIVATE
+        Qt6::Test
+        Qt6::Core
+        Qt6::Sql
+)
+
+add_test(NAME DatabaseManagerTest COMMAND test_database_manager)
  
 include(GNUInstallDirs)
 install(TARGETS WordlClone
