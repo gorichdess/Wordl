@@ -72,33 +72,7 @@ void GameController::submitGuess()
         return;
     }
 
-    QHash<QString, int> lettersLeft;
-
-    for (int i = 0; i < m_maxWordLength; i++) {
-        lettersLeft[m_secretWord[i]]++;
-    }
-
-    QVector<int> statuses(m_maxWordLength, 1);
-
-    for (int i = 0; i < m_maxWordLength; ++i) { // first loop to find CORRRECT letters
-        if (guess[i] == m_secretWord[i]) {
-            statuses[i] = 3; // CORRECT
-            lettersLeft[guess[i]]--;
-        }
-    }
-
-    for (int i = 0; i < m_maxWordLength; ++i) {
-        if (statuses[i] == 3) {
-            continue;
-        }
-
-        QChar guessChar = guess[i];
-
-        if (lettersLeft.contains(guessChar) && lettersLeft[guessChar] > 0) { // second loop to find PRESENT letters anf only if we still have some in hash
-            statuses[i] = 2; // PRESENT
-            lettersLeft[guessChar]--;
-        }
-    }
+    QVector<int> statuses = WordEvaluator::evaluate(guess, m_secretWord);
 
     for (int i = 0; i < m_maxWordLength; ++i) {
         int cellIdx = startIdx + i;

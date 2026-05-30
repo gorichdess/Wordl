@@ -10,6 +10,7 @@
 #include "KeyboardModel.h"
 #include "DatabaseManager.h"
 #include "StatisticsManager.h"
+#include "WordEvaluator.h"
 
 class GameController : public QObject
 {
