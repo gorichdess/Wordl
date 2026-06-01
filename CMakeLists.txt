@@ -30,6 +30,12 @@ qt_add_resources(WordlClone "word_lists"
         data/ukrainian_words.txt
 )
 
+qt_add_resources(WordlClone "database"
+    PREFIX "/"
+    FILES
+        data/wordle.db
+)
+
 set_source_files_properties(qml/components/Theme.qml
     PROPERTIES
         QT_QML_SINGLETON_TYPE TRUE

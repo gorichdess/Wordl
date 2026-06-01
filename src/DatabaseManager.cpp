@@ -18,6 +18,12 @@ bool DatabaseManager::openDatabase(const QString &databaseName,const QString &co
 
     QString dbPath = appDataPath + "/" + databaseName;
 
+    if (!QFile::exists(dbPath)) {
+        if (!QFile::copy(":/data/wordle.db", dbPath)) {
+            qDebug() << "Failed to copy wordle.db from resources";
+        }
+    }
+
     m_database = QSqlDatabase::addDatabase("QSQLITE", connectionName);
     m_database.setDatabaseName(dbPath);
 
