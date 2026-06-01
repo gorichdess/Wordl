@@ -7,8 +7,8 @@ Grid {
 
     columns: 5
     rows: 5
-    columnSpacing: 6
-    rowSpacing: 6
+    columnSpacing: Math.max(4, width * 0.01)
+    rowSpacing: Math.max(4, height * 0.01)
 
     property int currentAttempt: 0
     property string inputText: ""

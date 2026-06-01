@@ -8,41 +8,43 @@ Rectangle {
     border.width: 2
 
     readonly property var tileStatus: {
-            "EMPTY": 0,
-            "ABSENT": 1,
-            "PRESENT": 2,
-            "CORRECT": 3
-        }
+        "EMPTY": 0,
+        "ABSENT": 1,
+        "PRESENT": 2,
+        "CORRECT": 3
+    }
 
     property string letter: ""
     property int status: box.tileStatus.EMPTY
 
     color: {
         switch (status) {
-                case box.tileStatus.CORRECT:
-                    return Theme.correctColor;
-                case box.tileStatus.PRESENT:
-                    return Theme.presentColor;
-                case box.tileStatus.ABSENT:
-                    return Theme.absentColor;
-                default:
-                    return "transparent";
-            }
+            case box.tileStatus.CORRECT:
+                return Theme.correctColor;
+            case box.tileStatus.PRESENT:
+                return Theme.presentColor;
+            case box.tileStatus.ABSENT:
+                return Theme.absentColor;
+            default:
+                return "transparent";
+        }
     }
 
     border.color: {
-        if (status === box.tileStatus.EMPTY) return letter === "" ? Theme.defaultKeyColor : Theme.typedBorderColor
+        if (status === box.tileStatus.EMPTY)
+            return letter === "" ? Theme.defaultKeyColor : Theme.typedBorderColor
         return "transparent"
     }
 
     AppText {
         text: box.letter.toUpperCase()
         anchors.centerIn: parent
-
-        font.pixelSize: parent.height * 0.45
+        font.pixelSize: Math.min(parent.height * 0.5, 32)
         font.bold: true
         color: box.status === box.tileStatus.EMPTY ? Theme.textOnLightBg : Theme.textOnDarkBg
     }
 
-    Behavior on color { ColorAnimation { duration: 250 } }
+    Behavior on color {
+        ColorAnimation { duration: 200 }
+    }
 }

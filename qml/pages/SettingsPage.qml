@@ -13,6 +13,21 @@ Page {
     width: stackViewMain.width
     height: stackViewMain.height
 
+    focus: true
+
+    Component.onCompleted: {
+        gamePage.forceActiveFocus()
+    }
+
+    Keys.onBackPressed: (event) => {
+        if (StackView.view) {
+            StackView.view.pop()
+        } else {
+            stackViewMain.pop()
+        }
+        event.accepted = true
+    }
+
     AppButton {
         id: back
         width: 30

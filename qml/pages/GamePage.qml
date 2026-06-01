@@ -1,34 +1,59 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import "../components"  //whyyyy import "WordlClone" doesnt work??
+import "../components"
 
 Page {
     id: gamePage
+    focus: true
+
+    Component.onCompleted: gamePage.forceActiveFocus()
+
+    Keys.onBackPressed: (event) => {
+        if (helpPopup.opened) {
+            helpPopup.close()
+            event.accepted = true
+        } else if (resultDialog.opened) {
+            resultDialog.close()
+            gameController.resetGame()
+            event.accepted = true
+        } else if (invalidWordDialog.opened) {
+            invalidWordDialog.close()
+            event.accepted = true
+        } else {
+            if (StackView.view) {
+                StackView.view.pop()
+            } else {
+                stackViewMain.pop()
+            }
+            event.accepted = true
+        }
+    }
 
     background: Rectangle {
         color: Theme.pageBackgroundColor
     }
 
-    width: stackViewMain.width
-    height: stackViewMain.height
+    readonly property bool isLandscape: width > height
+    readonly property bool isTablet: width > 600
+    readonly property real maxGameWidth: isLandscape ? Math.min(width * 0.9, 450) : (isTablet ? 500 : Math.min(width * 0.9, 400))
+    readonly property real topMargin: isLandscape ? 6 : 40
+    readonly property real smallButtonSize: isLandscape ? 34 : 30
 
     AppButton {
         id: back
-        width: 30
-        height: 30
-
+        width: smallButtonSize
+        height: smallButtonSize
         anchors.top: parent.top
         anchors.left: parent.left
+        anchors.topMargin: topMargin
+        anchors.leftMargin: 12
 
-        anchors.topMargin: 40
-        anchors.leftMargin: 15
-
-        AppText{
+        AppText {
             text: "X"
             color: Theme.textOnLightBg
             anchors.centerIn: parent
-            font.pointSize: 15
+            font.pointSize: isLandscape ? 16 : 15
             font.bold: true
         }
 
@@ -42,33 +67,30 @@ Page {
     }
 
     AppButton {
-        width: 30
-        height: 30
-
+        id: helpButton
+        width: smallButtonSize
+        height: smallButtonSize
         anchors.top: parent.top
         anchors.right: parent.right
+        anchors.topMargin: topMargin
+        anchors.rightMargin: 12
 
-        anchors.topMargin: 40
-        anchors.rightMargin: 15
-
-        AppText{
+        AppText {
             text: "?"
             color: Theme.textOnLightBg
             anchors.centerIn: parent
-            font.pointSize: 15
+            font.pointSize: isLandscape ? 16 : 15
             font.bold: true
         }
 
-        onClicked: {
-            helpPopup.open()
-        }
+        onClicked: helpPopup.open()
     }
 
     Popup {
         id: helpPopup
         anchors.centerIn: parent
-        width: parent.width * 0.8
-        height: parent.height * 0.7
+        width: gamePage.isLandscape ? parent.width * 0.65 : parent.width * 0.8
+        height: gamePage.isLandscape ? parent.height * 0.85 : parent.height * 0.7
         modal: true
         focus: true
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
@@ -79,87 +101,137 @@ Page {
             border.width: 2
         }
 
-        contentItem: ColumnLayout {
-            spacing: 15
+        contentItem: Flickable {
+            clip: true
+            contentHeight: helpContent.height
 
-            Text {
-                text: "HOW TO PLAY"
-                color: Theme.textOnDarkBg
-                font.bold: true
-                font.pointSize: 18
-                Layout.alignment: Qt.AlignHCenter
-            }
+            ColumnLayout {
+                id: helpContent
+                width: helpPopup.width - 40
+                spacing: gamePage.isLandscape ? 8 : 15
+                anchors.margins: 20
 
-            Text {
-                text: "Guess the secret word within 5 attempts.\nAfter every attempt color of letters will change."
-                color: Theme.textPopup
-                font.pointSize: 12
-                wrapMode: Text.WordWrap
-                Layout.fillWidth: true
-                Layout.maximumWidth: helpPopup.width - 40
-                horizontalAlignment: Text.AlignHCenter
-            }
-
-            RowLayout {
-                spacing: 10
-                Layout.alignment: Qt.AlignHCenter
-
-                Rectangle {
-                    width: 40; height: 40; color: Theme.correctColor
-                    Text { text: "A"; color: Theme.textOnDarkBg; anchors.centerIn: parent; font.bold: true }
+                Text {
+                    text: "HOW TO PLAY"
+                    color: Theme.textOnDarkBg
+                    font.bold: true
+                    font.pointSize: gamePage.isLandscape ? 16 : 18
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.fillWidth: true
                 }
-                Text { text: "Letter is in correct place."; color: Theme.textOnDarkBg }
-            }
 
-            RowLayout {
-                spacing: 10
-                Layout.alignment: Qt.AlignHCenter
-                Layout.fillWidth: true
-                Layout.maximumWidth: helpPopup.width - 40
-
-                Rectangle {
-                    width: 40; height: 40; color: Theme.presentColor
-                    Text { text: "В"; color: Theme.textOnDarkBg; anchors.centerIn: parent; font.bold: true }
+                Text {
+                    text: "Guess the secret word within 5 attempts.\nAfter every attempt color of letters will change."
+                    color: Theme.textPopup
+                    font.pointSize: 12
+                    wrapMode: Text.WordWrap
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignHCenter
                 }
-                Text { text: "Letter is not in correct place, \n but is in secret word"; color: Theme.textOnDarkBg }
-            }
 
-            RowLayout {
-                spacing: 10
-                Layout.alignment: Qt.AlignHCenter
+                GridLayout {
+                    columns: gamePage.isLandscape ? 2 : 1
+                    rowSpacing: 8
+                    columnSpacing: 15
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter
 
-                Rectangle {
-                    width: 40; height: 40; color: Theme.absentColor
-                    Text { text: "C"; color: Theme.textOnDarkBg; anchors.centerIn: parent; font.bold: true }
+                    RowLayout {
+                        spacing: 8
+                        Layout.alignment: Qt.AlignHCenter
+
+                        Rectangle {
+                            width: 34
+                            height: 34
+                            color: Theme.correctColor
+
+                            Text {
+                                text: "A"
+                                color: Theme.textOnDarkBg
+                                anchors.centerIn: parent
+                                font.bold: true
+                            }
+                        }
+
+                        Text {
+                            text: "Letter is in correct place."
+                            color: Theme.textOnDarkBg
+                            wrapMode: Text.WordWrap
+                            Layout.fillWidth: true
+                        }
+                    }
+
+                    RowLayout {
+                        spacing: 8
+                        Layout.alignment: Qt.AlignHCenter
+
+                        Rectangle {
+                            width: 34
+                            height: 34
+                            color: Theme.presentColor
+
+                            Text {
+                                text: "B"
+                                color: Theme.textOnDarkBg
+                                anchors.centerIn: parent
+                                font.bold: true
+                            }
+                        }
+
+                        Text {
+                            text: "Letter is in the word but wrong position."
+                            color: Theme.textOnDarkBg
+                            wrapMode: Text.WordWrap
+                            Layout.fillWidth: true
+                        }
+                    }
+
+                    RowLayout {
+                        spacing: 8
+                        Layout.alignment: Qt.AlignHCenter
+
+                        Rectangle {
+                            width: 34
+                            height: 34
+                            color: Theme.absentColor
+
+                            Text {
+                                text: "C"
+                                color: Theme.textOnDarkBg
+                                anchors.centerIn: parent
+                                font.bold: true
+                            }
+                        }
+
+                        Text {
+                            text: "Letter is not in the secret word."
+                            color: Theme.textOnDarkBg
+                            wrapMode: Text.WordWrap
+                            Layout.fillWidth: true
+                        }
+                    }
                 }
-                Text { text: "Letter isnt in secret word."; color: Theme.textOnDarkBg }
-            }
 
-            RowLayout {
-                spacing: 10
-                Layout.alignment: Qt.AlignHCenter
+                Text {
+                    text: "Note: If a letter appears multiple times in your guess but only once in the secret word, only the first occurrence will be highlighted in yellow!"
+                    color: Theme.textPopup
+                    font.pointSize: 11
+                    wrapMode: Text.WordWrap
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignLeft
+                }
 
-                Text { text: "\n If a letter is repeated multiple times in your guess,
-                              \n but appears only once in the secret word,
-                            \n only the first extra letter will be highlighted in yellow!"; color: Theme.textPopup; font.pointSize: 12}
-            }
-
-            Button {
-                text: "Ok"
-                Layout.alignment: Qt.AlignHCenter
-                onClicked: helpPopup.close()
+                Button {
+                    text: "OK"
+                    Layout.alignment: Qt.AlignHCenter
+                    onClicked: helpPopup.close()
+                }
             }
         }
     }
 
     Popup {
         id: resultDialog
-
-        background: Rectangle {
-            color: Theme.pageBackgroundColor
-            radius: 10
-        }
-
         padding: 20
         modal: true
         anchors.centerIn: parent
@@ -167,12 +239,18 @@ Page {
         property string resultText: ""
         property string title: "Game result"
 
+        background: Rectangle {
+            color: Theme.pageBackgroundColor
+            radius: 10
+        }
+
         contentItem: ColumnLayout {
             spacing: 15
 
             Item {
                 Layout.preferredHeight: 40
                 Layout.fillWidth: true
+
                 AppText {
                     text: resultDialog.title
                     anchors.centerIn: parent
@@ -216,12 +294,6 @@ Page {
 
     Popup {
         id: invalidWordDialog
-
-        background: Rectangle {
-            color: Theme.pageBackgroundColor
-            radius: 10
-        }
-
         padding: 20
         modal: true
         anchors.centerIn: parent
@@ -229,12 +301,18 @@ Page {
         property string resultText: ""
         property string title: "Invalid word"
 
+        background: Rectangle {
+            color: Theme.pageBackgroundColor
+            radius: 10
+        }
+
         contentItem: ColumnLayout {
             spacing: 15
 
             Item {
                 Layout.preferredHeight: 40
                 Layout.fillWidth: true
+
                 AppText {
                     text: invalidWordDialog.title
                     anchors.centerIn: parent
@@ -294,90 +372,94 @@ Page {
         }
     }
 
-    ColumnLayout{
-        width: Math.min(gamePage.width * 0.9, 400)
-        anchors.centerIn: parent
-        spacing: 15
+    Flickable {
+        anchors.top: parent.top
+        anchors.topMargin: isLandscape ? 44 : back.height + topMargin + 10
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        contentHeight: gameLayout.height
+        clip: true
+        flickableDirection: Flickable.VerticalFlick
+        ScrollBar.vertical: ScrollBar { policy: ScrollBar.AsNeeded }
 
-        GameBoard {
-            id: gameBoard
-            Layout.fillWidth: true
-            Layout.preferredHeight: width
-            Layout.alignment: Qt.AlignHCenter
+        ColumnLayout {
+            id: gameLayout
+            width: parent.width
+            spacing: isLandscape ? 4 : 15
 
-            currentAttempt: gameController.currentAttempt
-            inputText: gameController.currentInput
+            ColumnLayout {
+                width: Math.min(parent.width, maxGameWidth)
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: isLandscape ? 4 : 15
 
-            boardModel: gameController.boardModel
-        }
+                GameBoard {
+                    id: gameBoard
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: width
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.maximumWidth: maxGameWidth
+                    Layout.maximumHeight: maxGameWidth
 
-        Item {
-            Layout.fillHeight: true
-            Layout.preferredHeight: 20
-        }
-
-        GameKeyboard {
-            id: gameKeyboard
-            Layout.fillWidth: true
-            keyboardRowModel: gameController.keyboardModel
-
-            onLetterPressed: function(letter) {
-                gameController.appendLetter(letter)
-            }
-
-            onEnterPressed: submitWordButton.clicked()
-
-            onBackspacePressed: {
-                gameController.removeLastLetter()
-            }
-        }
-
-        RowLayout {
-            spacing: 10
-            Layout.fillWidth: true
-
-            AppButton{
-                id: submitWordButton
-
-                Layout.fillWidth: true
-                Layout.preferredHeight: gamePage.height * 0.06
-                enabled: gameController.currentInput.length === 5 && gameController.currentAttempt < 5
-
-                AppText{
-                    id: submitWordText
-                    color: Theme.textOnLightBg
-                    text : "Submit"
-                    anchors.centerIn: parent
-                    font.pixelSize: parent.height * 0.4
-                    font.bold: true
+                    currentAttempt: gameController.currentAttempt
+                    inputText: gameController.currentInput
+                    boardModel: gameController.boardModel
                 }
 
+                GameKeyboard {
+                    id: gameKeyboard
+                    Layout.fillWidth: true
+                    Layout.maximumWidth: maxGameWidth
+                    Layout.alignment: Qt.AlignHCenter
+                    keyboardRowModel: gameController.keyboardModel
 
-                onClicked: {
-                    gameController.submitGuess();
-                }
-            }
+                    onLetterPressed: function(letter) {
+                        gameController.appendLetter(letter)
+                    }
 
-            AppButton{
-                id: newGameButton
-
-                Layout.fillWidth: true
-                Layout.preferredHeight: gamePage.height * 0.06
-
-                AppText{
-                    id: newGameText
-                    color: Theme.textOnLightBg
-                    text : "New Game"
-                    anchors.centerIn: parent
-                    font.pixelSize: parent.height * 0.4
-                    font.bold: true
+                    onEnterPressed: submitWordButton.clicked()
+                    onBackspacePressed: gameController.removeLastLetter()
                 }
 
+                RowLayout {
+                    spacing: 8
+                    Layout.fillWidth: true
+                    Layout.maximumWidth: maxGameWidth
+                    Layout.alignment: Qt.AlignHCenter
 
-                onClicked: {
-                    gameController.resetGame();
+                    AppButton {
+                        id: submitWordButton
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: isLandscape ? 32 : gamePage.height * 0.06
+                        enabled: gameController.currentInput.length === 5 && gameController.currentAttempt < 5
+
+                        AppText {
+                            text: "Submit"
+                            color: Theme.textOnLightBg
+                            anchors.centerIn: parent
+                            font.pixelSize: Math.min(parent.height * 0.45, 20)
+                            font.bold: true
+                        }
+
+                        onClicked: gameController.submitGuess()
+                    }
+
+                    AppButton {
+                        id: newGameButton
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: isLandscape ? 32 : gamePage.height * 0.06
+
+                        AppText {
+                            text: "New Game"
+                            color: Theme.textOnLightBg
+                            anchors.centerIn: parent
+                            font.pixelSize: Math.min(parent.height * 0.45, 20)
+                            font.bold: true
+                        }
+
+                        onClicked: gameController.resetGame()
+                    }
                 }
-
             }
         }
     }
