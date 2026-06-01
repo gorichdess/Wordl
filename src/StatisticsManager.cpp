@@ -2,6 +2,8 @@
 
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QDir>
+#include <QStandardPaths>
 
 StatisticsManager::StatisticsManager(QObject *parent)
     : QObject(parent)
@@ -31,8 +33,13 @@ void StatisticsManager::resetResults(const QString &language){
 }
 
 bool StatisticsManager::openDatabase(const QString &databaseName,const QString &connectionName){
+    QString appDataPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QDir().mkpath(appDataPath);
+
+    QString dbPath = appDataPath + "/" + databaseName;
+
     m_stat_database = QSqlDatabase::addDatabase("QSQLITE", connectionName);
-    m_stat_database.setDatabaseName(databaseName);
+    m_stat_database.setDatabaseName(dbPath);
 
     if (!m_stat_database.open()) {
         qDebug() << "Database error:" << m_stat_database.lastError().text();

@@ -4,7 +4,8 @@ import QtQuick.Layouts
 ColumnLayout {
     id: root
 
-    spacing: 8
+    spacing: 6
+    Layout.fillWidth: true
     Layout.alignment: Qt.AlignHCenter
 
     property var keyboardRowModel
@@ -21,7 +22,7 @@ ColumnLayout {
             model: root.keyboardRowModel.row0
 
             KeyboardButton {
-                Layout.preferredWidth: visible ? 50 : 0
+                Layout.fillWidth: true
 
                 keyText: model.letter
                 keyStatus: model.status
@@ -33,13 +34,16 @@ ColumnLayout {
 
     RowLayout {
         Layout.alignment: Qt.AlignHCenter
-        spacing: 6
+        spacing: 4
+
+        Layout.leftMargin: parent.width * 0.04
+        Layout.rightMargin: parent.width * 0.04
 
         Repeater {
             model: root.keyboardRowModel.row1
 
             KeyboardButton {
-                Layout.preferredWidth: visible ? 50 : 0
+                Layout.fillWidth: true
 
                 keyText: model.letter
                 keyStatus: model.status
@@ -51,13 +55,13 @@ ColumnLayout {
 
     RowLayout {
         Layout.alignment: Qt.AlignHCenter
-        spacing: 6
+        spacing: 4
 
         Repeater {
             model: root.keyboardRowModel.row2
 
             KeyboardButton {
-                Layout.preferredWidth: visible ? 50 : 0
+                Layout.fillWidth: true
 
                 keyText: model.letter
                 keyStatus: model.status
@@ -67,8 +71,8 @@ ColumnLayout {
         }
 
         KeyboardButton {
-            keyText: "-"
-            Layout.preferredWidth: 70
+            keyText: "⌫"
+            Layout.preferredWidth: parent.width * 0.15
             onClicked: root.backspacePressed()
         }
     }

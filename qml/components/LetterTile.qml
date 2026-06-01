@@ -3,8 +3,7 @@ import QtQuick.Controls
 
 Rectangle {
     id: box
-    width: 60
-    height: 60
+
     radius: 5
     border.width: 2
 
@@ -39,7 +38,8 @@ Rectangle {
     AppText {
         text: box.letter.toUpperCase()
         anchors.centerIn: parent
-        font.pointSize: 22
+
+        font.pixelSize: parent.height * 0.45
         font.bold: true
         color: box.status === box.tileStatus.EMPTY ? Theme.textOnLightBg : Theme.textOnDarkBg
     }

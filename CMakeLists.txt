@@ -21,21 +21,29 @@ qt_add_executable(WordlClone
   src/WordEvaluator.cpp
 )
 
-add_custom_command(TARGET WordlClone POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/data
-        $<TARGET_FILE_DIR:WordlClone>/data
+qt_add_resources(WordlClone "word_lists"
+    PREFIX "/"
+    FILES
+        data/english_words.txt
+        data/german_words.txt
+        data/russian_words.txt
+        data/ukrainian_words.txt
 )
 
 set_source_files_properties(qml/components/Theme.qml
     PROPERTIES
         QT_QML_SINGLETON_TYPE TRUE
 )
- 
+
+if(ANDROID)
+    set(QT_QMLCACHEGEN_EXECUTABLE "")
+endif()
+
 qt_add_qml_module(WordlClone
     URI WordlClone
     VERSION 1.0
     RESOURCE_PREFIX "/qt/qml"
+    NO_CACHEGEN
     QML_FILES
         qml/Main.qml
         qml/pages/GamePage.qml
@@ -50,6 +58,12 @@ qt_add_qml_module(WordlClone
         qml/components/AppText.qml
 )
 
+if(ANDROID)
+    set_target_properties(WordlClone PROPERTIES
+        QT_QMLCACHEGEN_ENABLED OFF
+    )
+endif()
+
  
 target_link_libraries(WordlClone
     PRIVATE
@@ -57,48 +71,50 @@ target_link_libraries(WordlClone
         Qt6::Sql
 )
 
-enable_testing()
+if(NOT ANDROID)
+    enable_testing()
 
-add_executable(test_word_evaluator
-    tests/test_word_evaluator.cpp
-    src/WordEvaluator.cpp
-)
+    add_executable(test_word_evaluator
+        tests/test_word_evaluator.cpp
+        src/WordEvaluator.cpp
+    )
 
-target_link_libraries(test_word_evaluator
-    PRIVATE
-        Qt6::Test
-        Qt6::Core
-)
+    target_link_libraries(test_word_evaluator
+        PRIVATE
+            Qt6::Test
+            Qt6::Core
+    )
 
-add_test(NAME WordEvaluatorTest COMMAND test_word_evaluator)
+    add_test(NAME WordEvaluatorTest COMMAND test_word_evaluator)
 
-add_executable(test_statistics_manager
-    tests/test_statistics_manager.cpp
-    src/StatisticsManager.cpp
-)
+    add_executable(test_statistics_manager
+        tests/test_statistics_manager.cpp
+        src/StatisticsManager.cpp
+    )
 
-target_link_libraries(test_statistics_manager
-    PRIVATE
-        Qt6::Test
-        Qt6::Core
-        Qt6::Sql
-)
+    target_link_libraries(test_statistics_manager
+        PRIVATE
+            Qt6::Test
+            Qt6::Core
+            Qt6::Sql
+    )
 
-add_test(NAME StatisticsManagerTest COMMAND test_statistics_manager)
+    add_test(NAME StatisticsManagerTest COMMAND test_statistics_manager)
 
-add_executable(test_database_manager
-    tests/test_database_manager.cpp
-    src/DatabaseManager.cpp
-)
+    add_executable(test_database_manager
+        tests/test_database_manager.cpp
+        src/DatabaseManager.cpp
+    )
 
-target_link_libraries(test_database_manager
-    PRIVATE
-        Qt6::Test
-        Qt6::Core
-        Qt6::Sql
-)
+    target_link_libraries(test_database_manager
+        PRIVATE
+            Qt6::Test
+            Qt6::Core
+            Qt6::Sql
+    )
 
-add_test(NAME DatabaseManagerTest COMMAND test_database_manager)
+    add_test(NAME DatabaseManagerTest COMMAND test_database_manager)
+endif()
  
 include(GNUInstallDirs)
 install(TARGETS WordlClone

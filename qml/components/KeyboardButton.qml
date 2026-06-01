@@ -8,11 +8,16 @@ AppButton {
     property string keyText: ""
     property int keyStatus: 0
 
+    Layout.fillWidth: true
+    Layout.preferredHeight: minPageWidth * 0.12
+
+    readonly property real minPageWidth: root.Window.width ? root.Window.width : 360
+
     AppText{
         text: keyText
         anchors.centerIn: parent
         font.bold: true
-        font.pointSize: 20
+        font.pixelSize: parent.height * 0.4
     }
 
     background: Rectangle {
@@ -27,9 +32,5 @@ AppButton {
             }
         }
 
-    Layout.preferredWidth: 50
-    Layout.preferredHeight: 60
-
-    font.pointSize: 15
     font.bold: true
 }

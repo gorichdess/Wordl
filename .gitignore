@@ -28,3 +28,22 @@ cmake_install.cmake
 # system files
 .DS_Store
 Thumbs.db
+
+# Android builds
+*.apk
+*.aab
+*.apks
+
+# Databases generated at runtime
+*.db
+*.db-shm
+*.db-wal
+
+# Android/Gradle
+.gradle/
+gradle/
+local.properties
+
+# Qt Android generated files
+android-build/
+android-build-*/

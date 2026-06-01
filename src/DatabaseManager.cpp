@@ -6,13 +6,20 @@
 #include <QDebug>
 #include <QFile>
 #include <QTextStream>
+#include <QDir>
+#include <QStandardPaths>
 
 DatabaseManager::DatabaseManager(){}
 
 bool DatabaseManager::openDatabase(const QString &databaseName,const QString &connectionName)
 {
+    QString appDataPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QDir().mkpath(appDataPath);
+
+    QString dbPath = appDataPath + "/" + databaseName;
+
     m_database = QSqlDatabase::addDatabase("QSQLITE", connectionName);
-    m_database.setDatabaseName(databaseName);
+    m_database.setDatabaseName(dbPath);
 
     if (!m_database.open()) {
         qDebug() << "Database error:" << m_database.lastError().text();
@@ -22,18 +29,18 @@ bool DatabaseManager::openDatabase(const QString &databaseName,const QString &co
     createTables();
 
     if (isWordTableEmpty("English")) {
-        importWordsFromFile("data/english_words.txt", "English");
+        importWordsFromFile(":/data/english_words.txt", "English");
     }
     if (isWordTableEmpty("Deutsch")) {
-        importWordsFromFile("data/german_words.txt", "Deutsch");
+        importWordsFromFile(":/data/german_words.txt", "Deutsch");
     }
 
     if (isWordTableEmpty("Русский")) {
-        importWordsFromFile("data/russian_words.txt", "Русский");
+        importWordsFromFile(":/data/russian_words.txt", "Русский");
     }
 
     if (isWordTableEmpty("Українська")) {
-        importWordsFromFile("data/ukrainian_words.txt", "Українська");
+        importWordsFromFile(":/data/ukrainian_words.txt", "Українська");
     }
 
     return true;

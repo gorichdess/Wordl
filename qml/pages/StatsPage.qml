@@ -17,11 +17,18 @@ Page {
         id: back
         width: 30
         height: 30
-        z: 10
+
+        anchors.top: parent.top
+        anchors.left: parent.left
+
+        anchors.topMargin: 40
+        anchors.leftMargin: 15
 
         AppText{
             text: "X"
+            color: Theme.textOnLightBg
             anchors.centerIn: parent
+            font.pointSize: 15
             font.bold: true
         }
 
@@ -32,7 +39,6 @@ Page {
                 stackViewMain.pop()
             }
         }
-
     }
 
     ColumnLayout {

@@ -18,6 +18,12 @@ Page {
         width: 30
         height: 30
 
+        anchors.top: parent.top
+        anchors.left: parent.left
+
+        anchors.topMargin: 40
+        anchors.leftMargin: 15
+
         AppText{
             text: "X"
             color: Theme.textOnLightBg
@@ -41,6 +47,9 @@ Page {
 
         anchors.top: parent.top
         anchors.right: parent.right
+
+        anchors.topMargin: 40
+        anchors.rightMargin: 15
 
         AppText{
             text: "?"
@@ -87,6 +96,7 @@ Page {
                 font.pointSize: 12
                 wrapMode: Text.WordWrap
                 Layout.fillWidth: true
+                Layout.maximumWidth: helpPopup.width - 40
                 horizontalAlignment: Text.AlignHCenter
             }
 
@@ -104,12 +114,14 @@ Page {
             RowLayout {
                 spacing: 10
                 Layout.alignment: Qt.AlignHCenter
+                Layout.fillWidth: true
+                Layout.maximumWidth: helpPopup.width - 40
 
                 Rectangle {
                     width: 40; height: 40; color: Theme.presentColor
                     Text { text: "В"; color: Theme.textOnDarkBg; anchors.centerIn: parent; font.bold: true }
                 }
-                Text { text: "Letter is not in correct place, but is in secret word"; color: Theme.textOnDarkBg }
+                Text { text: "Letter is not in correct place, \n but is in secret word"; color: Theme.textOnDarkBg }
             }
 
             RowLayout {
@@ -283,23 +295,31 @@ Page {
     }
 
     ColumnLayout{
+        width: Math.min(gamePage.width * 0.9, 400)
         anchors.centerIn: parent
-        spacing: 20
+        spacing: 15
 
         GameBoard {
             id: gameBoard
+            Layout.fillWidth: true
+            Layout.preferredHeight: width
             Layout.alignment: Qt.AlignHCenter
+
             currentAttempt: gameController.currentAttempt
             inputText: gameController.currentInput
 
             boardModel: gameController.boardModel
         }
 
+        Item {
+            Layout.fillHeight: true
+            Layout.preferredHeight: 20
+        }
+
         GameKeyboard {
             id: gameKeyboard
+            Layout.fillWidth: true
             keyboardRowModel: gameController.keyboardModel
-
-            Layout.alignment: Qt.AlignHCenter
 
             onLetterPressed: function(letter) {
                 gameController.appendLetter(letter)
@@ -315,14 +335,12 @@ Page {
         RowLayout {
             spacing: 10
             Layout.fillWidth: true
-            Layout.preferredWidth: 400
-            Layout.alignment: Qt.AlignHCenter
 
             AppButton{
                 id: submitWordButton
 
                 Layout.fillWidth: true
-                Layout.preferredHeight: 50
+                Layout.preferredHeight: gamePage.height * 0.06
                 enabled: gameController.currentInput.length === 5 && gameController.currentAttempt < 5
 
                 AppText{
@@ -330,7 +348,7 @@ Page {
                     color: Theme.textOnLightBg
                     text : "Submit"
                     anchors.centerIn: parent
-                    font.pointSize: 20
+                    font.pixelSize: parent.height * 0.4
                     font.bold: true
                 }
 
@@ -344,14 +362,14 @@ Page {
                 id: newGameButton
 
                 Layout.fillWidth: true
-                Layout.preferredHeight: 50
+                Layout.preferredHeight: gamePage.height * 0.06
 
                 AppText{
                     id: newGameText
                     color: Theme.textOnLightBg
                     text : "New Game"
                     anchors.centerIn: parent
-                    font.pointSize: 20
+                    font.pixelSize: parent.height * 0.4
                     font.bold: true
                 }
 
