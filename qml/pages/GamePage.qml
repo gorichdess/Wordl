@@ -37,13 +37,14 @@ Page {
     readonly property bool isLandscape: width > height
     readonly property bool isTablet: width > 600
     readonly property real maxGameWidth: isLandscape ? Math.min(width * 0.9, 450) : (isTablet ? 500 : Math.min(width * 0.9, 400))
-    readonly property real topMargin: isLandscape ? 6 : 40
-    readonly property real smallButtonSize: isLandscape ? 34 : 30
+    readonly property real topMargin: isLandscape ? 6 : 54
+    readonly property real navButtonSize: isLandscape ? 44 : 48
 
     AppButton {
         id: back
-        width: smallButtonSize
-        height: smallButtonSize
+        z: 10
+        width: navButtonSize
+        height: navButtonSize
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.topMargin: topMargin
@@ -53,7 +54,7 @@ Page {
             text: "X"
             color: Theme.textOnLightBg
             anchors.centerIn: parent
-            font.pointSize: isLandscape ? 16 : 15
+            font.pointSize: 18
             font.bold: true
         }
 
@@ -68,8 +69,9 @@ Page {
 
     AppButton {
         id: helpButton
-        width: smallButtonSize
-        height: smallButtonSize
+        z: 10
+        width: navButtonSize
+        height: navButtonSize
         anchors.top: parent.top
         anchors.right: parent.right
         anchors.topMargin: topMargin
@@ -79,7 +81,7 @@ Page {
             text: "?"
             color: Theme.textOnLightBg
             anchors.centerIn: parent
-            font.pointSize: isLandscape ? 16 : 15
+            font.pointSize: 18
             font.bold: true
         }
 
@@ -89,8 +91,11 @@ Page {
     Popup {
         id: helpPopup
         anchors.centerIn: parent
-        width: gamePage.isLandscape ? parent.width * 0.65 : parent.width * 0.8
-        height: gamePage.isLandscape ? parent.height * 0.85 : parent.height * 0.7
+        width: gamePage.isLandscape ? Math.min(parent.width * 0.7, 500) : parent.width * 0.85
+
+        height: Math.min(parent.height * 0.85, helpColumn.implicitHeight + padding * 2)
+
+        padding: 20
         modal: true
         focus: true
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
@@ -103,13 +108,16 @@ Page {
 
         contentItem: Flickable {
             clip: true
-            contentHeight: helpContent.height
+            contentHeight: helpColumn.height + 30
+            anchors.fill: parent
+            ScrollBar.vertical: ScrollBar { policy: ScrollBar.AsNeeded }
 
             ColumnLayout {
-                id: helpContent
-                width: helpPopup.width - 40
-                spacing: gamePage.isLandscape ? 8 : 15
-                anchors.margins: 20
+                id: helpColumn
+                width: parent.width - 30
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: gamePage.isLandscape ? 10 : 14
+                anchors.margins: 15
 
                 Text {
                     text: "HOW TO PLAY"
@@ -118,31 +126,30 @@ Page {
                     font.pointSize: gamePage.isLandscape ? 16 : 18
                     Layout.alignment: Qt.AlignHCenter
                     Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignHCenter
                 }
 
                 Text {
-                    text: "Guess the secret word within 5 attempts.\nAfter every attempt color of letters will change."
+                    text: "Guess the secret word within 5 attempts.\nAfter every attempt the color of letters will change."
                     color: Theme.textPopup
-                    font.pointSize: 12
+                    font.pointSize: gamePage.isLandscape ? 12 : 13
                     wrapMode: Text.WordWrap
                     Layout.fillWidth: true
                     horizontalAlignment: Text.AlignHCenter
                 }
 
-                GridLayout {
-                    columns: gamePage.isLandscape ? 2 : 1
-                    rowSpacing: 8
-                    columnSpacing: 15
+                ColumnLayout {
                     Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignHCenter
+                    spacing: 10
 
                     RowLayout {
-                        spacing: 8
-                        Layout.alignment: Qt.AlignHCenter
+                        spacing: 10
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignLeft
 
                         Rectangle {
-                            width: 34
-                            height: 34
+                            width: 36
+                            height: 36
                             color: Theme.correctColor
 
                             Text {
@@ -150,6 +157,7 @@ Page {
                                 color: Theme.textOnDarkBg
                                 anchors.centerIn: parent
                                 font.bold: true
+                                font.pointSize: 12
                             }
                         }
 
@@ -158,16 +166,18 @@ Page {
                             color: Theme.textOnDarkBg
                             wrapMode: Text.WordWrap
                             Layout.fillWidth: true
+                            font.pointSize: 12
                         }
                     }
 
                     RowLayout {
-                        spacing: 8
-                        Layout.alignment: Qt.AlignHCenter
+                        spacing: 10
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignLeft
 
                         Rectangle {
-                            width: 34
-                            height: 34
+                            width: 36
+                            height: 36
                             color: Theme.presentColor
 
                             Text {
@@ -175,6 +185,7 @@ Page {
                                 color: Theme.textOnDarkBg
                                 anchors.centerIn: parent
                                 font.bold: true
+                                font.pointSize: 12
                             }
                         }
 
@@ -183,16 +194,18 @@ Page {
                             color: Theme.textOnDarkBg
                             wrapMode: Text.WordWrap
                             Layout.fillWidth: true
+                            font.pointSize: 12
                         }
                     }
 
                     RowLayout {
-                        spacing: 8
-                        Layout.alignment: Qt.AlignHCenter
+                        spacing: 10
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignLeft
 
                         Rectangle {
-                            width: 34
-                            height: 34
+                            width: 36
+                            height: 36
                             color: Theme.absentColor
 
                             Text {
@@ -200,6 +213,7 @@ Page {
                                 color: Theme.textOnDarkBg
                                 anchors.centerIn: parent
                                 font.bold: true
+                                font.pointSize: 12
                             }
                         }
 
@@ -208,6 +222,7 @@ Page {
                             color: Theme.textOnDarkBg
                             wrapMode: Text.WordWrap
                             Layout.fillWidth: true
+                            font.pointSize: 12
                         }
                     }
                 }
@@ -373,8 +388,8 @@ Page {
     }
 
     Flickable {
-        anchors.top: parent.top
-        anchors.topMargin: isLandscape ? 44 : back.height + topMargin + 10
+        anchors.top: back.bottom
+        anchors.topMargin: isLandscape ? 8 : 24
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
@@ -386,12 +401,12 @@ Page {
         ColumnLayout {
             id: gameLayout
             width: parent.width
-            spacing: isLandscape ? 4 : 15
+            spacing: isLandscape ? 6 : 15
 
             ColumnLayout {
                 width: Math.min(parent.width, maxGameWidth)
                 anchors.horizontalCenter: parent.horizontalCenter
-                spacing: isLandscape ? 4 : 15
+                spacing: isLandscape ? 6 : 15
 
                 GameBoard {
                     id: gameBoard
@@ -422,7 +437,7 @@ Page {
                 }
 
                 RowLayout {
-                    spacing: 8
+                    spacing: 10
                     Layout.fillWidth: true
                     Layout.maximumWidth: maxGameWidth
                     Layout.alignment: Qt.AlignHCenter
@@ -430,7 +445,7 @@ Page {
                     AppButton {
                         id: submitWordButton
                         Layout.fillWidth: true
-                        Layout.preferredHeight: isLandscape ? 32 : gamePage.height * 0.06
+                        Layout.preferredHeight: isLandscape ? 40 : gamePage.height * 0.065
                         enabled: gameController.currentInput.length === 5 && gameController.currentAttempt < 5
 
                         AppText {
@@ -447,7 +462,7 @@ Page {
                     AppButton {
                         id: newGameButton
                         Layout.fillWidth: true
-                        Layout.preferredHeight: isLandscape ? 32 : gamePage.height * 0.06
+                        Layout.preferredHeight: isLandscape ? 40 : gamePage.height * 0.065
 
                         AppText {
                             text: "New Game"

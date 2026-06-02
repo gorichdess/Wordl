@@ -16,8 +16,12 @@ Page {
     focus: true
 
     Component.onCompleted: {
-        gamePage.forceActiveFocus()
+        statsPage.forceActiveFocus()
     }
+
+    readonly property bool isLandscape: width > height
+    readonly property real topMargin: isLandscape ? 6 : 54
+    readonly property real navButtonSize: isLandscape ? 44 : 48
 
     Keys.onBackPressed: (event) => {
         if (StackView.view) {
@@ -30,20 +34,21 @@ Page {
 
     AppButton {
         id: back
-        width: 30
-        height: 30
+        z: 10
+        width: navButtonSize
+        height: navButtonSize
 
         anchors.top: parent.top
         anchors.left: parent.left
 
-        anchors.topMargin: 40
-        anchors.leftMargin: 15
+        anchors.topMargin: topMargin
+        anchors.leftMargin: 12
 
-        AppText{
+        AppText {
             text: "X"
             color: Theme.textOnLightBg
             anchors.centerIn: parent
-            font.pointSize: 15
+            font.pointSize: 18
             font.bold: true
         }
 
