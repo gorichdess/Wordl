@@ -32,11 +32,17 @@ void StatisticsManager::resetResults(const QString &language){
     }
 }
 
-bool StatisticsManager::openDatabase(const QString &databaseName,const QString &connectionName){
-    QString appDataPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    QDir().mkpath(appDataPath);
+bool StatisticsManager::openDatabase(const QString &databaseName, const QString &connectionName)
+{
+    QString dbPath;
 
-    QString dbPath = appDataPath + "/" + databaseName;
+    if (databaseName == ":memory:") {
+        dbPath = ":memory:";
+    } else {
+        QString appDataPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+        QDir().mkpath(appDataPath);
+        dbPath = appDataPath + "/" + databaseName;
+    }
 
     m_stat_database = QSqlDatabase::addDatabase("QSQLITE", connectionName);
     m_stat_database.setDatabaseName(dbPath);
@@ -48,7 +54,6 @@ bool StatisticsManager::openDatabase(const QString &databaseName,const QString &
 
     createTables();
     initializeLanguages();
-
 
     return true;
 }

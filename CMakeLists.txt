@@ -112,6 +112,21 @@ if(NOT ANDROID)
         src/DatabaseManager.cpp
     )
 
+    qt_add_resources(test_database_manager "test_words"
+        PREFIX "/"
+        FILES
+            data/english_words.txt
+            data/german_words.txt
+            data/russian_words.txt
+            data/ukrainian_words.txt
+    )
+
+    qt_add_resources(test_database_manager "test_database"
+        PREFIX "/"
+        FILES
+            data/wordle.db
+    )
+
     target_link_libraries(test_database_manager
         PRIVATE
             Qt6::Test

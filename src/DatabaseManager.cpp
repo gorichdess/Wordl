@@ -11,16 +11,19 @@
 
 DatabaseManager::DatabaseManager(){}
 
-bool DatabaseManager::openDatabase(const QString &databaseName,const QString &connectionName)
+bool DatabaseManager::openDatabase(const QString &databaseName, const QString &connectionName)
 {
-    QString appDataPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    QDir().mkpath(appDataPath);
+    QString dbPath;
 
-    QString dbPath = appDataPath + "/" + databaseName;
+    if (databaseName == ":memory:") {
+        dbPath = ":memory:";
+    } else {
+        QString appDataPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+        QDir().mkpath(appDataPath);
+        dbPath = appDataPath + "/" + databaseName;
 
-    if (!QFile::exists(dbPath)) {
-        if (!QFile::copy(":/data/wordle.db", dbPath)) {
-            qDebug() << "Failed to copy wordle.db from resources";
+        if (!QFile::exists(dbPath)) {
+            QFile::copy(":/data/wordle.db", dbPath);
         }
     }
 
@@ -36,17 +39,6 @@ bool DatabaseManager::openDatabase(const QString &databaseName,const QString &co
 
     if (isWordTableEmpty("English")) {
         importWordsFromFile(":/data/english_words.txt", "English");
-    }
-    if (isWordTableEmpty("Deutsch")) {
-        importWordsFromFile(":/data/german_words.txt", "Deutsch");
-    }
-
-    if (isWordTableEmpty("Русский")) {
-        importWordsFromFile(":/data/russian_words.txt", "Русский");
-    }
-
-    if (isWordTableEmpty("Українська")) {
-        importWordsFromFile(":/data/ukrainian_words.txt", "Українська");
     }
 
     return true;
